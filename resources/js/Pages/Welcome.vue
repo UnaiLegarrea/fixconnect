@@ -31,24 +31,19 @@ const companies = [
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head title="Welcome"/>
     <div class="flex flex-col min-h-screen bg-gray-100">
-        <!-- Header Component -->
         <AppHeader 
             title="FixConnect" 
         />
 
-        <!-- Main Content -->
         <main class="flex-1 p-4">
-            <!-- Title Card Component -->
             <div class="mb-4">
                 <TitleCard 
                     title="Empresas" 
                     subtitle="Disponibles"
                 />
             </div>
-
-            <!-- Company List with Company Card Components -->
             <div class="space-y-4">
                 <CompanyCard 
                     v-for="(company, index) in companies"
