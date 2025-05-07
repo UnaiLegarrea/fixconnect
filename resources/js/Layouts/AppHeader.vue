@@ -14,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    <header class="bg-[#1A2B4B] text-white p-4">
+    <header class="bg-primary text-white p-4">
         <div class="flex justify-between items-center">
             <div class="flex items-center">
                 <img src="/storage/logo.png" alt="FixConnect" class="h-16 w-16 mr-2" />
@@ -27,7 +27,7 @@ defineProps({
                 Iniciar Sesion
             </Link>
         </div>
-        <div v-if="subtitle" class="text-xs text-gray-300 mt-1">
+        <div v-if="subtitle" class="text-xs text-neutral mt-1">
             {{ subtitle }}
         </div>
     </header>

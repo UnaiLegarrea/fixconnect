@@ -57,7 +57,7 @@ const requests = [
 
 <template>
     <Head title="Welcome"/>
-    <div class="flex flex-col min-h-screen bg-gray-100">
+    <div class="flex flex-col min-h-screen bg-neutral">
         <AppHeader 
             title="FixConnect" 
         />
