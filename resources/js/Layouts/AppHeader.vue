@@ -17,7 +17,7 @@ defineProps({
     <header class="bg-[#1A2B4B] text-white p-4">
         <div class="flex justify-between items-center">
             <div class="flex items-center">
-                <img src="/img/logo.svg" alt="FixConnect" class="h-8 w-8 mr-2" />
+                <img src="/storage/logo.png" alt="FixConnect" class="h-16 w-16 mr-2" />
                 <span class="text-xl font-bold">{{ title }}</span>
             </div>
             <Link
