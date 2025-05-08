@@ -10,6 +10,8 @@ export default {
         './resources/js/**/*.vue',
     ],
 
+    darkMode: 'class', // Activamos el modo oscuro basado en clase
+
     theme: {
         extend: {
             fontFamily: {
@@ -34,11 +36,18 @@ export default {
                 neutral: {
                     DEFAULT: '#F5F5F5',
                     dark: '#E0E0E0',
+                    blue: "#14213D",
                 },
                 success: '#28A745',
                 warning: '#FFC107',
                 error: '#DC3545',
                 info: '#17A2B8',
+                dark: {
+                    primary: '#121212',
+                    secondary: '#1E1E1E',
+                    surface: '#282828',
+                    card: '#2D2D2D'
+                },
             },
         },
     },

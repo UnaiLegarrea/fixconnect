@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <footer class="bg-primary text-white p-4">
+    <footer class="bg-primary dark:bg-dark-primary text-white p-4">
         <div class="flex justify-between">
             <!-- Settings Icon -->
             <button class="flex flex-col items-center">
