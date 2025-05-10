@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('empresa_id')->nullable()->constrained('empresas')->onDelete('set null');
             $table->string('titulo');
             $table->text('descripcion');
+            $table->string('categoria')->default('General');
             $table->enum('estado', ['abierta', 'aceptada', 'cerrada'])->default('abierta');
             $table->timestamps();
             });

@@ -33,11 +33,14 @@ class SolicitudFactory extends Factory
             }
         }
         
+        $categorias = ['Hogar', 'Tecnología', 'Fontanería', 'Electricidad', 'Automóvil', 'General'];
+        
         return [
             'cliente_id' => $clienteId,
             'empresa_id' => $empresaId,
             'titulo' => fake()->sentence(),
             'descripcion' => fake()->paragraph(3),
+            'categoria' => fake()->randomElement($categorias),
             'estado' => $estado,
         ];
     }

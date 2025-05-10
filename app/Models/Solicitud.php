@@ -12,7 +12,7 @@ class Solicitud extends Model
     protected $table = 'solicitudes';
     
     protected $fillable = [
-        'cliente_id', 'empresa_id', 'titulo', 'descripcion', 'estado',
+        'cliente_id', 'empresa_id', 'titulo', 'descripcion', 'estado', 'categoria',
     ];
 
     public function cliente()

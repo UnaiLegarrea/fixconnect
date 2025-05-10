@@ -7,7 +7,7 @@ import RequestCard from '@/Components/UI/RequestCard.vue';
 import CompanyCard from '@/Components/UI/CompanyCard.vue';
 import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
     canLogin: {
         type: Boolean,
     },
@@ -22,59 +22,26 @@ defineProps({
         type: String,
         required: true,
     },
+    empresas: {
+        type: Array,
+        required: true,
+    },
+    solicitudes: {
+        type: Array,
+        required: true,
+    },
+    categorias: {
+        type: Array,
+        required: true,
+    },
 });
 
-// Referencias para el filtrado
 const activeTab = ref('empresas');
 const searchQuery = ref('');
 
-const companies = [
-    { id: 1, name: 'Arreglos S.L', description: 'Especialistas en reparaciones del hogar', categoria: 'Hogar' },
-    { id: 2, name: 'ElectroFix', description: 'Reparación de dispositivos electrónicos', categoria: 'Tecnología' },
-    { id: 3, name: 'Fontanería Express', description: 'Soluciones rápidas de fontanería', categoria: 'Hogar' },
-    { id: 4, name: 'AutoMecánica', description: 'Especialistas en reparación de vehículos', categoria: 'Automóvil' }
-];
-
-const requests = [
-    { 
-        id: 1, 
-        nombre: 'Fuga en tubería',
-        descripcion: 'Necesito reparación urgente de una fuga en el baño',
-        direccion: 'C/ Los Pinos 23',
-        imagen: null,
-        categoria: 'Fontanería'
-    },
-    { 
-        id: 2, 
-        nombre: 'Reparación urgente',
-        descripcion: 'Se necesita reparación de fontanería en cocina',
-        direccion: 'Calle Principal 123',
-        imagen: null,
-        categoria: 'Fontanería'
-    },
-    { 
-        id: 3, 
-        nombre: 'Instalación eléctrica',
-        descripcion: 'Instalación de nuevas tomas de corriente',
-        direccion: 'Avenida Central 45',
-        imagen: null,
-        categoria: 'Electricidad'
-    }
-];
-
-// Categorías disponibles
-const categorias = [
-    { id: 1, nombre: 'Todas' },
-    { id: 2, nombre: 'Hogar' },
-    { id: 3, nombre: 'Tecnología' },
-    { id: 4, nombre: 'Fontanería' },
-    { id: 5, nombre: 'Electricidad' },
-    { id: 6, nombre: 'Automóvil' }
-];
-
 const filteredCompanies = () => {
-    if (!searchQuery.value) return companies;
-    return companies.filter(company => 
+    if (!searchQuery.value) return props.empresas;
+    return props.empresas.filter(company => 
         company.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
         company.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         company.categoria.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -82,8 +49,8 @@ const filteredCompanies = () => {
 };
 
 const filteredRequests = () => {
-    if (!searchQuery.value) return requests;
-    return requests.filter(request => 
+    if (!searchQuery.value) return props.solicitudes;
+    return props.solicitudes.filter(request => 
         request.nombre.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
         request.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
         request.categoria.toLowerCase().includes(searchQuery.value.toLowerCase())
