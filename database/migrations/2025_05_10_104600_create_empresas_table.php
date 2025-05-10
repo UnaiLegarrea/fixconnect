@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('ubicacion');
+            $table->string('categoria')->default('General');
             $table->string('documento_path')->nullable();
             $table->boolean('verificada')->default(false);
             $table->timestamps();

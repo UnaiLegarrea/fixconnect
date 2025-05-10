@@ -14,7 +14,7 @@ Route::get('/', function () {
             'id' => $empresa->id,
             'name' => $empresa->user->nombre,
             'description' => $empresa->user->email, 
-            'categoria' => 'General', 
+            'categoria' => $empresa->categoria, 
             'ubicacion' => $empresa->ubicacion,
             'verificada' => $empresa->verificada
         ];

@@ -18,9 +18,12 @@ class EmpresaFactory extends Factory
             $userId = fake()->randomElement($users);
         }
         
+        $categorias = ['Hogar', 'Tecnología', 'Fontanería', 'Electricidad', 'Automóvil', 'General'];
+        
         return [
             'user_id' => $userId,
             'ubicacion' => fake()->address(),
+            'categoria' => fake()->randomElement($categorias),
             'documento_path' => 'documentos/empresa_' . fake()->uuid() . '.pdf',
             'verificada' => fake()->boolean(70),
         ];

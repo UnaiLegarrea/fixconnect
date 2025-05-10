@@ -38,23 +38,54 @@ const props = defineProps({
 
 const activeTab = ref('empresas');
 const searchQuery = ref('');
+const selectedCategoria = ref('Todas');
 
 const filteredCompanies = () => {
-    if (!searchQuery.value) return props.empresas;
-    return props.empresas.filter(company => 
-        company.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
-        company.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        company.categoria.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+    let results = props.empresas;
+    
+    // Filtrar por texto de búsqueda
+    if (searchQuery.value) {
+        results = results.filter(company => 
+            company.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+            company.description.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+            company.categoria.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+    }
+    
+    // Filtrar por categoría seleccionada
+    if (selectedCategoria.value !== 'Todas') {
+        results = results.filter(company => 
+            company.categoria === selectedCategoria.value
+        );
+    }
+    
+    return results;
 };
 
 const filteredRequests = () => {
-    if (!searchQuery.value) return props.solicitudes;
-    return props.solicitudes.filter(request => 
-        request.nombre.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
-        request.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        request.categoria.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+    let results = props.solicitudes;
+    
+    // Filtrar por texto de búsqueda
+    if (searchQuery.value) {
+        results = results.filter(request => 
+            request.nombre.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+            request.descripcion.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+            request.categoria.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
+    }
+    
+    // Filtrar por categoría seleccionada
+    if (selectedCategoria.value !== 'Todas') {
+        results = results.filter(request => 
+            request.categoria === selectedCategoria.value
+        );
+    }
+    
+    return results;
+};
+
+const selectCategoria = (categoria) => {
+    selectedCategoria.value = categoria;
 };
 </script>
 
@@ -133,7 +164,13 @@ const filteredRequests = () => {
                 <button 
                     v-for="categoria in categorias" 
                     :key="categoria.id"
-                    class="px-3 py-1 text-sm bg-white dark:bg-dark-surface dark:text-white rounded-full border border-gray-300 dark:border-gray-700 hover:bg-primary hover:text-white hover:border-primary dark:hover:bg-primary transition-colors"
+                    @click="selectCategoria(categoria.nombre)"
+                    :class="[
+                        'px-3 py-1 text-sm rounded-full border transition-colors',
+                        selectedCategoria === categoria.nombre 
+                            ? 'bg-primary text-white border-primary' 
+                            : 'bg-white dark:bg-dark-surface dark:text-white border-gray-300 dark:border-gray-700 hover:bg-primary hover:text-white hover:border-primary dark:hover:bg-primary'
+                    ]"
                 >
                     {{ categoria.nombre }}
                 </button>
