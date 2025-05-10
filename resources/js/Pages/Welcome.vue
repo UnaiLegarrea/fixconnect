@@ -72,7 +72,6 @@ const categorias = [
     { id: 6, nombre: 'Automóvil' }
 ];
 
-// Filtrado de elementos
 const filteredCompanies = () => {
     if (!searchQuery.value) return companies;
     return companies.filter(company => 
