@@ -15,6 +15,10 @@ defineProps({
     imagen: {
         type: String,
         default: null
+    },
+    categoria: {
+        type: String,
+        default: ''
     }
 });
 </script>
@@ -32,6 +36,11 @@ defineProps({
         
         <div class="text-center mb-3">
             <h2 class="text-xl font-bold">{{ nombre }}</h2>
+            <div v-if="categoria" class="mt-1">
+                <span class="inline-block bg-primary bg-opacity-20 text-primary dark:bg-primary-dark dark:text-white px-2 py-1 rounded-full text-xs">
+                    {{ categoria }}
+                </span>
+            </div>
         </div>
         
         <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden mb-3">

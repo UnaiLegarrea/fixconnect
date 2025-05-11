@@ -103,7 +103,7 @@ const selectCategoria = (categoria) => {
                 <p class="text-lg mb-6">Encuentra rápidamente empresas especializadas para tus reparaciones o publica tu problema para recibir ayuda</p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Link href="/register" class="bg-white text-primary dark:bg-dark-surface dark:text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition duration-200">
+                    <Link :href="route('register')" class="bg-white text-primary dark:bg-dark-surface dark:text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition duration-200">
                         Registrarme ahora
                     </Link>
                     <Link href="#buscar" class="bg-transparent border-2 border-white py-3 px-6 rounded-lg hover:bg-white/10 transition duration-200">
@@ -187,6 +187,7 @@ const selectCategoria = (categoria) => {
                         :key="company.id"
                         :name="company.name"
                         :description="company.description"
+                        :categoria="company.categoria"
                         class="h-full"
                     />
                 </div>
@@ -205,6 +206,7 @@ const selectCategoria = (categoria) => {
                         :descripcion="request.descripcion"
                         :direccion="request.direccion"
                         :imagen="request.imagen"
+                        :categoria="request.categoria"
                         class="h-full"
                     />
                 </div>
@@ -214,7 +216,7 @@ const selectCategoria = (categoria) => {
             <section class="my-12 bg-neutral-blue dark:bg-dark-card rounded-lg shadow-lg p-6 text-white text-center">
                 <h2 class="text-2xl font-bold mb-4">¿Tienes un problema que necesita solución?</h2>
                 <p class="mb-6">Publica tu solicitud y conecta con profesionales cualificados en minutos</p>
-                <Link href="/register" class="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition duration-200 inline-block">
+                <Link :href="route('register')" class="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary-dark transition duration-200 inline-block">
                     Publicar un problema
                 </Link>
             </section>

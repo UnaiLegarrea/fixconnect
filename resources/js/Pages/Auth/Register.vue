@@ -22,16 +22,21 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Registro - FixConnect" />
+        
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-primary">Crear Cuenta</h2>
+            <p class="text-gray-600 mt-2">Únete a FixConnect</p>
+        </div>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Nombre" class="text-gray-700" />
 
                 <TextInput
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
                     v-model="form.name"
                     required
                     autofocus
@@ -42,12 +47,12 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Correo Electrónico" class="text-gray-700" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
                     v-model="form.email"
                     required
                     autocomplete="username"
@@ -57,12 +62,12 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Contraseña" class="text-gray-700" />
 
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
                     v-model="form.password"
                     required
                     autocomplete="new-password"
@@ -74,13 +79,14 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Confirmar Contraseña"
+                    class="text-gray-700"
                 />
 
                 <TextInput
                     id="password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
                     v-model="form.password_confirmation"
                     required
                     autocomplete="new-password"
@@ -92,20 +98,22 @@ const submit = () => {
                 />
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="mt-6 flex items-center justify-between">
                 <Link
                     :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-sm text-primary hover:text-primary-dark focus:outline-none underline"
                 >
-                    Already registered?
+                    ¿Ya tienes cuenta? Inicia sesión
                 </Link>
+            </div>
 
+            <div class="mt-6">
                 <PrimaryButton
-                    class="ms-4"
+                    class="w-full justify-center py-3"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Crear Cuenta
                 </PrimaryButton>
             </div>
         </form>
