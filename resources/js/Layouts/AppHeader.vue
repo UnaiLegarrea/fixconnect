@@ -16,9 +16,8 @@ defineProps({
 
 <template>
     <header class="bg-primary dark:bg-dark-primary text-white p-4">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="/storage/logo.png" alt="FixConnect" class="h-16 w-16 mr-2" />
+        <div class="flex justify-between items-center">            <div class="flex items-center">
+                <img src="/storage/logoTFG2.png" alt="FixConnect" class="h-12 w-12 mr-2" />
                 <span class="text-xl font-bold">{{ title }}</span>
             </div>
             <div class="flex items-center gap-4">

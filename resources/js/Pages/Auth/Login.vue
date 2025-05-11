@@ -31,20 +31,25 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
+        <Head title="Iniciar Sesión - FixConnect" />
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-primary">Iniciar Sesión</h2>
+            <p class="text-gray-600 mt-2">Accede a tu cuenta de FixConnect</p>
+        </div>
+
+        <div v-if="status" class="mb-4 p-4 rounded-lg bg-success/10 text-sm font-medium text-success">
             {{ status }}
         </div>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Correo Electrónico" class="text-gray-700" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
                     v-model="form.email"
                     required
                     autofocus
@@ -55,12 +60,12 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Contraseña" class="text-gray-700" />
 
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -71,28 +76,35 @@ const submit = () => {
 
             <div class="mt-4 block">
                 <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
+                    <Checkbox name="remember" v-model:checked="form.remember" class="rounded border-gray-300 text-primary focus:ring-primary" />
+                    <span class="ms-2 text-sm text-gray-600">Recordarme</span>
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="mt-6 flex items-center justify-between">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-sm text-primary hover:text-primary-dark focus:outline-none underline"
                 >
-                    Forgot your password?
+                    ¿Olvidaste tu contraseña?
                 </Link>
 
+                <Link
+                    :href="route('register')"
+                    class="text-sm text-primary hover:text-primary-dark focus:outline-none underline"
+                >
+                    Crear cuenta
+                </Link>
+            </div>
+
+            <div class="mt-6">
                 <PrimaryButton
-                    class="ms-4"
+                    class="w-full justify-center py-3"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Log in
+                    Iniciar Sesión
                 </PrimaryButton>
             </div>
         </form>
