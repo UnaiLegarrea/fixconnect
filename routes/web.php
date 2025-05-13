@@ -54,14 +54,24 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Rutas para solicitudes
+    Route::get('/solicitudes/create', [App\Http\Controllers\SolicitudController::class, 'create'])->name('solicitudes.create');
+    Route::post('/solicitudes', [App\Http\Controllers\SolicitudController::class, 'store'])->name('solicitudes.store');
+    Route::get('/solicitudes/{solicitud}', [App\Http\Controllers\SolicitudController::class, 'show'])->name('solicitudes.show');
+    Route::delete('/solicitudes/{solicitud}/cancelar', [App\Http\Controllers\SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
+    
+    // Rutas para chat
+    Route::get('/solicitudes/{solicitud}/chat', [App\Http\Controllers\ChatController::class, 'show'])->name('solicitudes.chat');
+    Route::post('/solicitudes/{solicitud}/chat', [App\Http\Controllers\ChatController::class, 'enviarMensaje'])->name('solicitudes.chat.enviar');
 });
 
 require __DIR__.'/auth.php';

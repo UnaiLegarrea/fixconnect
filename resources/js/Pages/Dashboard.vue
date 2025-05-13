@@ -1,33 +1,11 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 
-// Estado para almacenar los datos del dashboard
-const stats = ref({
-    solicitudesPendientes: 0,
-    solicitudesCompletadas: 0,
-    solicitudesRecientes: []
-});
-
-// Cargar datos del dashboard
-onMounted(async () => {
-    try {
-        // En una implementación real, estos datos vendrían de una API
-        // Por ahora usamos datos de ejemplo
-        stats.value = {
-            solicitudesPendientes: 5,
-            solicitudesCompletadas: 12,
-            solicitudesRecientes: [
-                { id: 1, titulo: 'Reparación de ordenador', categoria: 'Informática', estado: 'abierta', fecha: '2025-05-12' },
-                { id: 2, titulo: 'Problema con la red wifi', categoria: 'Redes', estado: 'aceptada', fecha: '2025-05-11' },
-                { id: 3, titulo: 'Instalación de software', categoria: 'Software', estado: 'cerrada', fecha: '2025-05-10' }
-            ]
-        };
-    } catch (error) {
-        console.error('Error al cargar datos del dashboard:', error);
-    }
+// Acceder a las props recibidas desde el controlador
+const props = defineProps({
+    stats: Object
 });
 
 // Función para obtener clase de color según el estado
@@ -102,7 +80,11 @@ const getStatusColor = (estado) => {
                                     <tr v-for="solicitud in stats.solicitudesRecientes" :key="solicitud.id" 
                                         class="hover:bg-neutral dark:hover:bg-dark-primary transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-primary-dark dark:text-neutral">{{ solicitud.titulo }}</div>
+                                            <div class="text-sm font-medium text-primary-dark dark:text-neutral">
+                                                <Link :href="route('solicitudes.show', solicitud.id)" class="hover:underline">
+                                                    {{ solicitud.titulo }}
+                                                </Link>
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-primary-light dark:text-gray-400">{{ solicitud.categoria }}</div>
@@ -125,9 +107,9 @@ const getStatusColor = (estado) => {
                 
                 <!-- Botón para crear nueva solicitud -->
                 <div class="mt-6 flex justify-end">
-                    <a href="#" class="inline-flex items-center px-4 py-2 bg-primary dark:bg-secondary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-secondary-dark dark:hover:bg-secondary-light focus:bg-secondary-dark dark:focus:bg-secondary-light active:bg-secondary-dark dark:active:bg-secondary-light focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-primary transition ease-in-out duration-150">
+                    <Link :href="route('solicitudes.create')" class="inline-flex items-center px-4 py-2 bg-primary dark:bg-secondary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-secondary-dark dark:hover:bg-secondary-light focus:bg-secondary-dark dark:focus:bg-secondary-light active:bg-secondary-dark dark:active:bg-secondary-light focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-primary transition ease-in-out duration-150">
                         Nueva Solicitud
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
