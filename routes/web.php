@@ -52,7 +52,7 @@ Route::get('/', function () {
         'solicitudes' => $solicitudes,
         'categorias' => $categorias
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
