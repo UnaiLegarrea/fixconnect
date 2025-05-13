@@ -18,15 +18,21 @@ class MensajeController extends Controller
     public function show(Solicitud $solicitud)
     {
         $user = Auth::user();
-        $isEmpresa = $user->rol === 'empresa';
+        $isEmpresa = $user->rol === 'empresa' || $user->rol === 'admin';
         
         // Verificar permisos
         if ($isEmpresa) {
-            $empresa = $user->empresa;
-            if (!$empresa || $solicitud->empresa_id !== $empresa->id) {
-                abort(403, 'No autorizado para acceder a este chat.');
+            // Para administradores, permitir acceso a cualquier chat
+            if ($user->rol === 'admin') {
+                $otherUser = $solicitud->cliente;
+            } else {
+                // Para empresas, verificar que sea su solicitud
+                $empresa = $user->empresa;
+                if (!$empresa || $solicitud->empresa_id !== $empresa->id) {
+                    abort(403, 'No autorizado para acceder a este chat.');
+                }
+                $otherUser = $solicitud->cliente;
             }
-            $otherUser = $solicitud->cliente;
         } else {
             if ($solicitud->cliente_id !== $user->id) {
                 abort(403, 'No autorizado para acceder a este chat.');
@@ -102,7 +108,9 @@ class MensajeController extends Controller
         $user = Auth::user();
         
         // Verificar permisos
-        if ($user->rol === 'empresa') {
+        if ($user->rol === 'admin') {
+            // Los administradores tienen acceso a todos los chats
+        } else if ($user->rol === 'empresa') {
             $empresa = $user->empresa;
             if (!$empresa || $chat->empresa_id !== $empresa->id) {
                 abort(403, 'No autorizado para enviar mensajes en este chat.');
@@ -130,10 +138,14 @@ class MensajeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $isEmpresa = $user->rol === 'empresa';
+        $isEmpresa = $user->rol === 'empresa' || $user->rol === 'admin';
         
         // Obtener todos los chats del usuario
-        if ($isEmpresa) {
+        if ($user->rol === 'admin') {
+            // Para administradores, mostrar todos los chats
+            $chats = Chat::with(['solicitud', 'cliente', 'empresa.user'])
+                ->get();
+        } else if ($isEmpresa) {
             $chats = Chat::where('empresa_id', $user->empresa->id)
                 ->with(['solicitud', 'cliente'])
                 ->get();

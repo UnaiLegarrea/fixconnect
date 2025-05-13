@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
-{
-    public function index()
+{    public function index()
     {        $user = Auth::user();
         
         // Obtener estadísticas y solicitudes según el tipo de usuario
@@ -32,6 +31,31 @@ class DashboardController extends Controller
                                     ->where('empresa_id', $empresa->id)
                                     ->orderBy('updated_at', 'desc')
                                     ->take(5)
+                                    ->get()
+                                    ->map(function ($solicitud) {
+                                        return [
+                                            'id' => $solicitud->id,
+                                            'titulo' => $solicitud->titulo,
+                                            'categoria' => $solicitud->categoria,
+                                            'estado' => $solicitud->estado,
+                                            'fecha' => $solicitud->updated_at->format('Y-m-d')
+                                        ];
+                                    });
+        } else if($user->rol === 'admin'){
+            // Si es administrador, mostrar estadísticas globales
+            
+            // Solicitudes pendientes totales (abiertas o aceptadas)
+            $solicitudesPendientes = Solicitud::whereIn('estado', ['abierta', 'aceptada'])
+                                        ->count();
+            
+            // Solicitudes completadas totales (cerradas)
+            $solicitudesCompletadas = Solicitud::where('estado', 'cerrada')
+                                        ->count();
+            
+            // Solicitudes recientes (todas, globales)
+            $solicitudesRecientes = Solicitud::with(['empresa.user', 'cliente'])
+                                    ->orderBy('updated_at', 'desc')
+                                    ->take(10)
                                     ->get()
                                     ->map(function ($solicitud) {
                                         return [

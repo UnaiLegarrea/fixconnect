@@ -54,8 +54,9 @@ class SolicitudController extends Controller
      */
     public function show(Solicitud $solicitud)
     {
-        // Verificar que el usuario sea el cliente de la solicitud
-        if (Auth::id() !== $solicitud->cliente_id) {
+        // Verificar que el usuario sea el cliente de la solicitud o admin
+        $user = Auth::user();
+        if ($user->id !== $solicitud->cliente_id && $user->rol !== 'admin') {
             abort(403, 'No autorizado para ver esta solicitud.');
         }
         
@@ -88,8 +89,9 @@ class SolicitudController extends Controller
      */
     public function cancelar(Solicitud $solicitud)
     {
-        // Verificar que el usuario sea el cliente de la solicitud
-        if (Auth::id() !== $solicitud->cliente_id) {
+        // Verificar que el usuario sea el cliente de la solicitud o admin
+        $user = Auth::user();
+        if ($user->id !== $solicitud->cliente_id && $user->rol !== 'admin') {
             abort(403, 'No autorizado para cancelar esta solicitud.');
         }
         

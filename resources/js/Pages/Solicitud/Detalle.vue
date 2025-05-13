@@ -18,7 +18,7 @@
                                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                                     {{ solicitud.titulo }}
                                 </h3>                                <div class="mb-4 flex items-center">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-primary-dark dark:bg-primary-dark dark:text-primary-light mr-2">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark  mr-2">
                                         {{ solicitud.categoria }}
                                     </span>
                                     <span class="text-sm text-gray-500 dark:text-gray-400">
@@ -57,8 +57,7 @@
                             </svg>
                             Volver a la búsqueda
                         </Link>
-                        
-                        <form @submit.prevent="aceptarSolicitud">
+                          <form v-if="$page.props.auth.user.rol === 'empresa' || $page.props.auth.user.rol === 'admin'" @submit.prevent="aceptarSolicitud">
                             <button
                                 type="submit"
                                 class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"

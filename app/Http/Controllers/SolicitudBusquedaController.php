@@ -11,17 +11,19 @@ class SolicitudBusquedaController extends Controller
 {
     /**
      * Muestra el panel de búsqueda de solicitudes
-     */
-    public function index(Request $request)
+     */    public function index(Request $request)
     {
-        // Verificar que el usuario sea una empresa
+        // Verificar que el usuario sea una empresa o admin
         $user = Auth::user();
-        if ($user->rol !== 'empresa') {
-            return redirect()->route('dashboard')->with('error', 'Solo las empresas pueden acceder a esta sección.');
+        if ($user->rol !== 'empresa' && $user->rol !== 'admin') {
+            return redirect()->route('dashboard')->with('error', 'Solo las empresas y administradores pueden acceder a esta sección.');
         }
 
-        // Obtener categoría de la empresa para filtro por defecto
-        $empresaCategoria = $user->empresa->categoria;
+        // Obtener categoría de la empresa para filtro por defecto (solo si es empresa)
+        $empresaCategoria = null;
+        if ($user->rol === 'empresa') {
+            $empresaCategoria = $user->empresa->categoria;
+        }
         
         // Procesar los parámetros de filtrado
         $query = Solicitud::query()->with('cliente');
@@ -85,14 +87,13 @@ class SolicitudBusquedaController extends Controller
     
     /**
      * Aceptar una solicitud
-     */
-    public function aceptar(Solicitud $solicitud)
+     */    public function aceptar(Solicitud $solicitud)
     {
         $user = Auth::user();
         
-        // Verificar que el usuario sea una empresa
-        if ($user->rol !== 'empresa') {
-            return redirect()->back()->with('error', 'Solo las empresas pueden aceptar solicitudes.');
+        // Verificar que el usuario sea una empresa o admin
+        if ($user->rol !== 'empresa' && $user->rol !== 'admin') {
+            return redirect()->back()->with('error', 'Solo las empresas y administradores pueden aceptar solicitudes.');
         }
         
         // Verificar que la solicitud esté abierta
@@ -101,13 +102,35 @@ class SolicitudBusquedaController extends Controller
         }
         
         // Asignar la empresa a la solicitud y cambiar el estado
-        $solicitud->empresa_id = $user->empresa->id;
+        if ($user->rol === 'admin') {
+            // Para administradores, necesitamos verificar si hay una empresa disponible o crear una ficticia
+            $empresas = \App\Models\Empresa::all();
+            if ($empresas->isEmpty()) {
+                // En caso de no haber empresas, creamos una para el admin
+                $empresa = \App\Models\Empresa::create([
+                    'user_id' => $user->id,
+                    'categoria' => 'Administración',
+                    'ubicacion' => 'Central',
+                    'verificada' => true
+                ]);
+                $empresa_id = $empresa->id;
+            } else {
+                // Usar la primera empresa disponible
+                $empresa_id = $empresas->first()->id;
+            }
+        } else {
+            // Para usuarios empresa, usar su ID de empresa
+            $empresa_id = $user->empresa->id;
+        }
+        
+        $solicitud->empresa_id = $empresa_id;
         $solicitud->estado = 'aceptada';
         $solicitud->save();
-          // Crear un chat para la comunicación
+        
+        // Crear un chat para la comunicación
         $solicitud->chat()->create([
             'cliente_id' => $solicitud->cliente_id,
-            'empresa_id' => $user->empresa->id,
+            'empresa_id' => $empresa_id,
         ]);
         
         return redirect()->route('solicitudes.chat', $solicitud->id)
@@ -116,14 +139,13 @@ class SolicitudBusquedaController extends Controller
     
     /**
      * Ver detalles de una solicitud
-     */
-    public function show(Solicitud $solicitud)
+     */    public function show(Solicitud $solicitud)
     {
         $user = Auth::user();
         
-        // Verificar que el usuario sea una empresa
-        if ($user->rol !== 'empresa') {
-            return redirect()->route('dashboard')->with('error', 'Solo las empresas pueden acceder a esta sección.');
+        // Verificar que el usuario sea una empresa o admin
+        if ($user->rol !== 'empresa' && $user->rol !== 'admin') {
+            return redirect()->route('dashboard')->with('error', 'Solo las empresas y administradores pueden acceder a esta sección.');
         }
         
         // Verificar que la solicitud esté abierta

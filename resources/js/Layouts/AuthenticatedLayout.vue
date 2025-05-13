@@ -41,7 +41,7 @@ const user = usePage().props.auth.user;
                                     Panel de Control
                                 </NavLink>
                                 <NavLink
-                                    v-if="user.rol === 'empresa'"
+                                    v-if="user.rol === 'empresa' || user.rol === 'admin'"
                                     :href="route('solicitud.busqueda')"
                                     :active="route().current('solicitud.busqueda') || route().current('solicitud.busqueda.show')"
                                 >
@@ -156,7 +156,7 @@ const user = usePage().props.auth.user;
                             Panel de Control
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            v-if="user.rol === 'empresa'"
+                            v-if="user.rol === 'empresa' || user.rol === 'admin'"
                             :href="route('solicitud.busqueda')"
                             :active="route().current('solicitud.busqueda') || route().current('solicitud.busqueda.show')"
                         >

@@ -15,16 +15,23 @@ class ServicioController extends Controller
      */
     public function show(Solicitud $solicitud)
     {
-        // Verificar que el usuario sea de tipo empresa
-        if (Auth::user()->rol !== 'empresa') {
+        // Verificar que el usuario sea de tipo empresa o admin
+        if (Auth::user()->rol !== 'empresa' && Auth::user()->rol !== 'admin') {
             abort(403, 'No autorizado para ver este servicio.');
         }
         
-        // Verificar que la solicitud pertenezca a la empresa del usuario
-        $empresa = Empresa::where('user_id', Auth::id())->first();
+        $user = Auth::user();
         
-        if (!$empresa || $solicitud->empresa_id !== $empresa->id) {
-            abort(403, 'No autorizado para ver este servicio.');
+        // Si es admin, permitir acceso directo
+        if ($user->rol === 'admin') {
+            // No necesita más validaciones
+        } else {
+            // Verificar que la solicitud pertenezca a la empresa del usuario
+            $empresa = Empresa::where('user_id', Auth::id())->first();
+            
+            if (!$empresa || $solicitud->empresa_id !== $empresa->id) {
+                abort(403, 'No autorizado para ver este servicio.');
+            }
         }
         
         // Obtener información del cliente
@@ -53,16 +60,20 @@ class ServicioController extends Controller
      */
     public function completar(Solicitud $solicitud)
     {
-        // Verificar que el usuario sea de tipo empresa
-        if (Auth::user()->rol !== 'empresa') {
+        // Verificar que el usuario sea de tipo empresa o admin
+        $user = Auth::user();
+        if ($user->rol !== 'empresa' && $user->rol !== 'admin') {
             abort(403, 'No autorizado para realizar esta acción.');
         }
         
-        // Verificar que la solicitud pertenezca a la empresa del usuario
-        $empresa = Empresa::where('user_id', Auth::id())->first();
-        
-        if (!$empresa || $solicitud->empresa_id !== $empresa->id) {
-            abort(403, 'No autorizado para realizar esta acción.');
+        // Si es admin, permitir la acción directamente
+        if ($user->rol !== 'admin') {
+            // Verificar que la solicitud pertenezca a la empresa del usuario
+            $empresa = Empresa::where('user_id', Auth::id())->first();
+            
+            if (!$empresa || $solicitud->empresa_id !== $empresa->id) {
+                abort(403, 'No autorizado para realizar esta acción.');
+            }
         }
         
         // Verificar que el estado sea 'aceptada'

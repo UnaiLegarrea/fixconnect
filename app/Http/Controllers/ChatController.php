@@ -15,12 +15,12 @@ class ChatController extends Controller
      * Muestra el chat para una solicitud específica
      */
     public function show(Solicitud $solicitud)
-    {
-        $user = Auth::user();
+    {        $user = Auth::user();
         
         // Verificar que el usuario tenga permiso para ver este chat
         if ($user->id !== $solicitud->cliente_id && 
-            ($user->rol !== 'empresa' || $user->empresa->id !== $solicitud->empresa_id)) {
+            ($user->rol !== 'empresa' && $user->rol !== 'admin') && 
+            ($user->rol === 'empresa' && $user->empresa->id !== $solicitud->empresa_id)) {
             abort(403, 'No autorizado para ver este chat.');
         }
         
@@ -106,10 +106,10 @@ class ChatController extends Controller
         ]);
         
         $user = Auth::user();
-        
-        // Verificar que el usuario tenga permiso para enviar mensajes en este chat
+          // Verificar que el usuario tenga permiso para enviar mensajes en este chat
         if ($user->id !== $solicitud->cliente_id && 
-            ($user->rol !== 'empresa' || $user->empresa->id !== $solicitud->empresa_id)) {
+            ($user->rol !== 'empresa' && $user->rol !== 'admin') && 
+            ($user->rol === 'empresa' && $user->empresa->id !== $solicitud->empresa_id)) {
             abort(403, 'No autorizado para enviar mensajes en este chat.');
         }
         
