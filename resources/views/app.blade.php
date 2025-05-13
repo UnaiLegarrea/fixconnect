@@ -14,6 +14,18 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+        
+        <!-- Dark Mode Script -->
+        <script>
+            // Verificar si se debe usar el modo oscuro
+            if (localStorage.getItem('darkMode') === 'true' || 
+                (localStorage.getItem('darkMode') === null && 
+                window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
         @inertia

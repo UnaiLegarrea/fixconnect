@@ -50,8 +50,8 @@ onMounted(() => {
         class="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none transition-colors"
         :class="[
             isDarkMode 
-                ? 'bg-gray-800 text-yellow-300 hover:bg-gray-700' 
-                : 'bg-blue-100 text-blue-900 hover:bg-blue-200'
+                ? 'bg-dark-surface text-secondary-light hover:bg-dark-primary' 
+                : 'bg-neutral text-primary hover:bg-neutral-dark'
         ]"
         aria-label="Alternar modo oscuro"
     >

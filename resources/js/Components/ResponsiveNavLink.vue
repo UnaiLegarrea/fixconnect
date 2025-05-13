@@ -14,8 +14,8 @@ const props = defineProps({
 
 const classes = computed(() =>
     props.active
-        ? 'block w-full ps-3 pe-4 py-2 border-l-4 border-secondary text-start text-base font-medium text-secondary-dark focus:outline-none focus:text-secondary-dark focus:bg-neutral focus:border-secondary transition duration-150 ease-in-out'
-        : 'block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-primary hover:text-primary-dark hover:bg-neutral hover:border-neutral-dark focus:outline-none focus:text-primary-dark focus:bg-neutral focus:border-neutral-dark transition duration-150 ease-in-out',
+        ? 'block w-full ps-3 pe-4 py-2 border-l-4 border-secondary dark:border-secondary-light text-start text-base font-medium text-secondary-dark dark:text-secondary-light focus:outline-none focus:text-secondary-dark dark:focus:text-secondary-light focus:bg-neutral dark:focus:bg-dark-primary focus:border-secondary dark:focus:border-secondary-light transition duration-150 ease-in-out'
+        : 'block w-full ps-3 pe-4 py-2 border-l-4 border-transparent text-start text-base font-medium text-primary dark:text-neutral hover:text-primary-dark dark:hover:text-white hover:bg-neutral dark:hover:bg-dark-primary hover:border-neutral-dark dark:hover:border-secondary-light focus:outline-none focus:text-primary-dark dark:focus:text-white focus:bg-neutral dark:focus:bg-dark-primary focus:border-neutral-dark dark:focus:border-secondary-light transition duration-150 ease-in-out',
 );
 </script>
 
