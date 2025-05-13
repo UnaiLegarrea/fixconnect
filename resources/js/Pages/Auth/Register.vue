@@ -5,13 +5,34 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const tipoUsuario = ref('cliente');
 
 const form = useForm({
     name: '',
     email: '',
+    telefono: '',
     password: '',
     password_confirmation: '',
+    es_empresa: false,
+    ubicacion: '',
+    categoria: '',
 });
+
+const toggleTipoUsuario = (tipo) => {
+    tipoUsuario.value = tipo;
+    form.es_empresa = tipo === 'empresa';
+};
+
+const categorias = [
+    'Hogar',
+    'Tecnología',
+    'Fontanería',
+    'Electricidad',
+    'Automóvil',
+    'General'
+];
 
 const submit = () => {
     form.post(route('register'), {
@@ -27,6 +48,30 @@ const submit = () => {
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-primary">Crear Cuenta</h2>
             <p class="text-gray-600 mt-2">Únete a FixConnect</p>
+        </div>
+
+        <!-- Selector de tipo de usuario -->
+        <div class="mb-6">
+            <div class="flex justify-center">
+                <div class="flex rounded-md shadow-sm">
+                    <button
+                        type="button"
+                        class="px-4 py-2 text-sm font-medium border border-r-0 rounded-l-md focus:outline-none"
+                        :class="tipoUsuario === 'cliente' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'"
+                        @click="toggleTipoUsuario('cliente')"
+                    >
+                        Soy Cliente
+                    </button>
+                    <button
+                        type="button"
+                        class="px-4 py-2 text-sm font-medium border rounded-r-md focus:outline-none"
+                        :class="tipoUsuario === 'empresa' ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'"
+                        @click="toggleTipoUsuario('empresa')"
+                    >
+                        Soy Empresa
+                    </button>
+                </div>
+            </div>
         </div>
 
         <form @submit.prevent="submit">
@@ -59,6 +104,58 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="telefono" value="Teléfono" class="text-gray-700" />
+
+                <TextInput
+                    id="telefono"
+                    type="tel"
+                    class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
+                    v-model="form.telefono"
+                    required
+                />
+
+                <InputError class="mt-2" :message="form.errors.telefono" />
+            </div>
+
+            <!-- Campos específicos para empresas -->
+            <div v-if="tipoUsuario === 'empresa'" class="border-t border-gray-200 mt-6 pt-6">
+                <h3 class="text-lg font-medium text-primary mb-4">Información de la Empresa</h3>
+                
+                <div class="mt-4">
+                    <InputLabel for="ubicacion" value="Ubicación" class="text-gray-700" />
+                    
+                    <TextInput
+                        id="ubicacion"
+                        type="text"
+                        class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
+                        v-model="form.ubicacion"
+                        required
+                        placeholder="Ej: Madrid, Barcelona, etc."
+                    />
+                    
+                    <InputError class="mt-2" :message="form.errors.ubicacion" />
+                </div>
+                
+                <div class="mt-4">
+                    <InputLabel for="categoria" value="Categoría Principal" class="text-gray-700" />
+                    
+                    <select
+                        id="categoria"
+                        v-model="form.categoria"
+                        class="mt-1 block w-full rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-surface dark:text-white"
+                        required
+                    >
+                        <option value="" disabled>Selecciona una categoría</option>
+                        <option v-for="categoria in categorias" :key="categoria" :value="categoria">
+                            {{ categoria }}
+                        </option>
+                    </select>
+                    
+                    <InputError class="mt-2" :message="form.errors.categoria" />
+                </div>
             </div>
 
             <div class="mt-4">
