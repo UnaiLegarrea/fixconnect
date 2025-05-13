@@ -107,8 +107,11 @@ const getStatusColor = (estado) => {
                 
                 <!-- Botón para crear nueva solicitud -->
                 <div class="mt-6 flex justify-end">
-                    <Link :href="route('solicitudes.create')" class="inline-flex items-center px-4 py-2 bg-primary dark:bg-secondary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-secondary-dark dark:hover:bg-secondary-light focus:bg-secondary-dark dark:focus:bg-secondary-light active:bg-secondary-dark dark:active:bg-secondary-light focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-primary transition ease-in-out duration-150">
+                    <Link v-if="$page.props.auth.user.rol !== 'empresa'" :href="route('solicitudes.create')" class="inline-flex items-center px-4 py-2 bg-primary dark:bg-secondary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-secondary-dark dark:hover:bg-secondary-light focus:bg-secondary-dark dark:focus:bg-secondary-light active:bg-secondary-dark dark:active:bg-secondary-light focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-primary transition ease-in-out duration-150">
                         Nueva Solicitud
+                    </Link>
+                    <Link v-else :href="route('solicitud.busqueda')" class="inline-flex items-center px-4 py-2 bg-primary dark:bg-secondary border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-secondary-dark dark:hover:bg-secondary-light focus:bg-secondary-dark dark:focus:bg-secondary-light active:bg-secondary-dark dark:active:bg-secondary-light focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-primary transition ease-in-out duration-150">
+                        Buscar Solicitudes
                     </Link>
                 </div>
             </div>

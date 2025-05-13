@@ -5,9 +5,10 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
 const showingNavigationDropdown = ref(false);
+const user = usePage().props.auth.user;
 </script>
 
 <template>
@@ -38,6 +39,13 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('dashboard')"
                                 >
                                     Panel de Control
+                                </NavLink>
+                                <NavLink
+                                    v-if="user.rol === 'empresa'"
+                                    :href="route('solicitud.busqueda')"
+                                    :active="route().current('solicitud.busqueda') || route().current('solicitud.busqueda.show')"
+                                >
+                                    Buscar Solicitudes
                                 </NavLink>
                             </div>
                         </div>
@@ -146,6 +154,13 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Panel de Control
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="user.rol === 'empresa'"
+                            :href="route('solicitud.busqueda')"
+                            :active="route().current('solicitud.busqueda') || route().current('solicitud.busqueda.show')"
+                        >
+                            Buscar Solicitudes
                         </ResponsiveNavLink>
                     </div>
 

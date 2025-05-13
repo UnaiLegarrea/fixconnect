@@ -66,6 +66,13 @@ Route::middleware('auth')->group(function () {
     // Rutas para solicitudes
     Route::get('/solicitudes/create', [App\Http\Controllers\SolicitudController::class, 'create'])->name('solicitudes.create');
     Route::post('/solicitudes', [App\Http\Controllers\SolicitudController::class, 'store'])->name('solicitudes.store');
+    
+    // Rutas para búsqueda de solicitudes (solo para empresas)
+    Route::get('/solicitudes/busqueda', [App\Http\Controllers\SolicitudBusquedaController::class, 'index'])->name('solicitud.busqueda');
+    Route::get('/solicitudes/busqueda/{solicitud}', [App\Http\Controllers\SolicitudBusquedaController::class, 'show'])->name('solicitud.busqueda.show');
+    Route::post('/solicitudes/busqueda/{solicitud}/aceptar', [App\Http\Controllers\SolicitudBusquedaController::class, 'aceptar'])->name('solicitud.busqueda.aceptar');
+    
+    // Rutas para detalles de solicitudes específicas (debe ir después de las rutas con prefijos más específicos)
     Route::get('/solicitudes/{solicitud}', [App\Http\Controllers\SolicitudController::class, 'show'])->name('solicitudes.show');
     Route::delete('/solicitudes/{solicitud}/cancelar', [App\Http\Controllers\SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
     
