@@ -46,7 +46,7 @@ const submit = () => {
         <Head title="Registro - FixConnect" />
         
         <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-primary">Crear Cuenta</h2>
+            <h2 class="text-2xl font-bold text-primary dark:text-white">Crear Cuenta </h2>
             <p class="text-gray-600 mt-2">Únete a FixConnect</p>
         </div>
 
@@ -122,7 +122,7 @@ const submit = () => {
 
             <!-- Campos específicos para empresas -->
             <div v-if="tipoUsuario === 'empresa'" class="border-t border-gray-200 mt-6 pt-6">
-                <h3 class="text-lg font-medium text-primary mb-4">Información de la Empresa</h3>
+                <h3 class="text-lg font-medium text-primary dark:text-white mb-4">Información de la Empresa</h3>
                 
                 <div class="mt-4">
                     <InputLabel for="ubicacion" value="Ubicación" class="text-gray-700" />
@@ -198,7 +198,7 @@ const submit = () => {
             <div class="mt-6 flex items-center justify-between">
                 <Link
                     :href="route('login')"
-                    class="text-sm text-primary hover:text-primary-dark focus:outline-none underline"
+                    class="text-sm text-primary hover:text-primary-dark dark:text-white focus:outline-none underline"
                 >
                     ¿Ya tienes cuenta? Inicia sesión
                 </Link>

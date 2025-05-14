@@ -77,8 +77,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/solicitudes/{solicitud}/cancelar', [App\Http\Controllers\SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
     
     // Rutas para chat
-    Route::get('/solicitudes/{solicitud}/chat', [App\Http\Controllers\ChatController::class, 'show'])->name('solicitudes.chat');
-    Route::post('/solicitudes/{solicitud}/chat', [App\Http\Controllers\ChatController::class, 'enviarMensaje'])->name('solicitudes.chat.enviar');
+    Route::get('/chats', [App\Http\Controllers\ChatListController::class, 'index'])->name('chat.list');
+    Route::get('/solicitudes/{solicitud}/chat', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
+    Route::post('/solicitudes/{solicitud}/chat/enviar', [App\Http\Controllers\ChatController::class, 'enviarMensaje'])->name('chat.enviar-mensaje');
 });
 
 require __DIR__.'/auth.php';

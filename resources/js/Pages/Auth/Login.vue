@@ -34,7 +34,7 @@ const submit = () => {
         <Head title="Iniciar Sesión - FixConnect" />
 
         <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-primary">Iniciar Sesión</h2>
+            <h2 class="text-2xl font-bold text-primary dark:text-white">Iniciar Sesión</h2>
             <p class="text-gray-600 mt-2">Accede a tu cuenta de FixConnect</p>
         </div>
 
@@ -85,14 +85,14 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="text-sm text-primary hover:text-primary-dark focus:outline-none underline"
+                    class="text-sm text-primary hover:text-primary-dark dark:text-white focus:outline-none underline"
                 >
                     ¿Olvidaste tu contraseña?
                 </Link>
 
                 <Link
                     :href="route('register')"
-                    class="text-sm text-primary hover:text-primary-dark focus:outline-none underline"
+                    class="text-sm text-primary hover:text-primary-dark dark:text-white focus:outline-none underline"
                 >
                     Crear cuenta
                 </Link>

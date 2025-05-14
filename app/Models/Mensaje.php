@@ -10,7 +10,11 @@ class Mensaje extends Model
     use HasFactory;
     
     protected $fillable = [
-        'chat_id', 'remitente_id', 'contenido',
+        'chat_id', 'remitente_id', 'contenido', 'leido',
+    ];
+    
+    protected $casts = [
+        'leido' => 'boolean',
     ];
 
     public function chat()

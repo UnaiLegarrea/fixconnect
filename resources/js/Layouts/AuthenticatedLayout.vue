@@ -5,10 +5,12 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import NotificacionBadge from '@/Components/NotificacionBadge.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
 const showingNavigationDropdown = ref(false);
 const user = usePage().props.auth.user;
+const mensajesNoLeidos = usePage().props.mensajesNoLeidos;
 </script>
 
 <template>
@@ -51,6 +53,17 @@ const user = usePage().props.auth.user;
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <!-- Indicador de mensajes no leídos -->
+                            <div class="relative mr-3">
+                                <Link :href="route('chat.list')" class="relative inline-flex items-center p-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light transition-colors duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
+                                        <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+                                    </svg>
+                                    <NotificacionBadge :contador-mensajes="mensajesNoLeidos" />
+                                </Link>
+                            </div>
+                            
                             <!-- Settings Dropdown -->
                             <DarkModeToggle class="mr-3" />
                             <div class="relative ms-3">
@@ -161,6 +174,16 @@ const user = usePage().props.auth.user;
                             :active="route().current('solicitud.busqueda') || route().current('solicitud.busqueda.show')"
                         >
                             Buscar Solicitudes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('chat.list')"
+                            :active="route().current('chat.list') || route().current('chat.show')"
+                            class="flex items-center"
+                        >
+                            <span>Mensajes</span>
+                            <div v-if="mensajesNoLeidos > 0" class="ml-2 px-2 py-0.5 bg-red-500 text-white text-xs font-bold rounded-full">
+                                {{ mensajesNoLeidos }}
+                            </div>
                         </ResponsiveNavLink>
                     </div>
 
