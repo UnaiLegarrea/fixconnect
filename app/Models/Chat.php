@@ -32,5 +32,15 @@ class Chat extends Model
     {
         return $this->hasMany(Mensaje::class);
     }
+    
+    /**
+     * Comprobar si un usuario puede acceder a este chat
+     */
+    public function userCanAccess($user)
+    {
+        return (int) $user->id === (int) $this->cliente_id || 
+               ($user->rol === 'empresa' && $user->empresa && (int) $user->empresa->id === (int) $this->empresa_id) ||
+               $user->rol === 'admin';
+    }
 }
 

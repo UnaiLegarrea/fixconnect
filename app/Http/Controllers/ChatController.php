@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\Mensaje;
 use App\Models\Solicitud;
+use App\Events\MensajeEnviado;
+use App\Events\MensajeRecibido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -129,6 +131,26 @@ class ChatController extends Controller
         $mensaje->contenido = $request->contenido;
         $mensaje->leido = false;
         $mensaje->save();
+        
+        try {
+            // Disparar el evento de mensaje enviado para actualización en tiempo real
+            event(new MensajeEnviado($mensaje));
+            
+            // Si el mensaje es para otro usuario, enviar notificación
+            if ($user->id === $chat->cliente_id && $chat->empresa_id) {
+                // Notificar a la empresa
+                $empresaUser = $solicitud->empresa->user;
+                if ($empresaUser) {
+                    event(new MensajeRecibido($mensaje, $empresaUser->id));
+                }
+            } else if ($user->rol === 'empresa' || $user->rol === 'admin') {
+                // Notificar al cliente
+                event(new MensajeRecibido($mensaje, $chat->cliente_id));
+            }
+        } catch (\Exception $e) {
+            // Log del error pero continuar
+            \Log::error('Error al enviar evento: ' . $e->getMessage());
+        }
         
         return back();
     }

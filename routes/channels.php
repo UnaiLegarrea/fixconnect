@@ -24,8 +24,6 @@ Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
         return false;
     }
     
-    // El usuario puede acceder al canal si es el cliente o la empresa asociada al chat
-    return (int) $user->id === (int) $chat->cliente_id || 
-           ((int) $user->empresa_id === (int) $chat->empresa_id && $user->rol === 'empresa') ||
-           $user->rol === 'admin';
+    // Usar el método del modelo para verificar acceso
+    return $chat->userCanAccess($user);
 });

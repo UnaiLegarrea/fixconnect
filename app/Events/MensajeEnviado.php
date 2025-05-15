@@ -51,8 +51,7 @@ class MensajeEnviado implements ShouldBroadcast
      * Get the data to broadcast.
      *
      * @return array
-     */
-    public function broadcastWith()
+     */    public function broadcastWith()
     {
         return [
             'id' => $this->mensaje->id,
@@ -62,7 +61,7 @@ class MensajeEnviado implements ShouldBroadcast
             'created_at' => $this->mensaje->created_at,
             'remitente' => [
                 'id' => $this->mensaje->remitente->id,
-                'name' => $this->mensaje->remitente->name,
+                'nombre' => $this->mensaje->remitente->nombre,
             ]
         ];
     }

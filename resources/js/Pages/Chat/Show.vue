@@ -132,8 +132,7 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick, watch, onUnmounted } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { router } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const props = defineProps({
@@ -170,17 +169,45 @@ const enviarMensaje = () => {
     
     enviando.value = true;
     
+    // Crear un mensaje temporal optimista para la UI
+    const mensajeTemporal = {
+        id: 'temp-' + Date.now(),
+        contenido: nuevoMensaje.value,
+        fecha: 'Enviando...',
+        remitente: {
+            id: props.usuarioActual.id,
+            nombre: 'Tú',
+            esUsuarioActual: true
+        },
+        leido: false
+    };
+    
+    // Agregar el mensaje temporal a la lista de mensajes
+    if (props.chat.mensajes) {
+        props.chat.mensajes.push(mensajeTemporal);
+    }
+    
+    // Limpiar el campo de texto y hacer scroll
+    nuevoMensaje.value = '';
+    scrollToBottom();
+    
+    // Enviar el mensaje al servidor
     router.post(route('chat.enviar-mensaje', props.solicitud.id), {
-        contenido: nuevoMensaje.value
+        contenido: mensajeTemporal.contenido
     }, {
         preserveScroll: true,
         onSuccess: () => {
-            nuevoMensaje.value = '';
-            scrollToBottom();
             enviando.value = false;
         },
         onError: () => {
             enviando.value = false;
+            // Eliminar el mensaje temporal en caso de error
+            if (props.chat.mensajes) {
+                const index = props.chat.mensajes.findIndex(m => m.id === mensajeTemporal.id);
+                if (index !== -1) {
+                    props.chat.mensajes.splice(index, 1);
+                }
+            }
         }
     });
 };
@@ -201,11 +228,20 @@ onMounted(() => {
     scrollToBottom();
     
     // Suscribirse al canal privado del chat
-    channelChat = window.Echo.private(`chat.${props.chat.id}`)
-        .listen('.nuevo.mensaje', (e) => {
-            // Cuando se recibe un nuevo mensaje, actualizar el chat
-            refrescarChat();
-        });
+    if (window.Echo) {
+        console.log('Suscribiéndose al canal: chat.' + props.chat.id);
+        channelChat = window.Echo.private(`chat.${props.chat.id}`)
+            .listen('.nuevo.mensaje', (e) => {
+                console.log('Nuevo mensaje recibido:', e);
+                
+                // Solo recargar si el mensaje no es del usuario actual
+                if (e.remitente_id !== props.usuarioActual.id) {
+                    refrescarChat();
+                }
+            });
+    } else {
+        console.error('Echo no está disponible');
+    }
 });
 
 // Limpiar la suscripción cuando el componente se desmonta
