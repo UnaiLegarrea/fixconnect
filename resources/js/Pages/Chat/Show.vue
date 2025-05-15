@@ -190,24 +190,28 @@ onMounted(() => {
     scrollToBottom();
 });
 
-// Recargar el chat cada 10 segundos para recibir nuevos mensajes
-// Esto es un enfoque temporal antes de implementar WebSockets
+// Utilizar Pusher para recibir mensajes en tiempo real
 const refrescarChat = () => {
     router.reload({ only: ['chat'], preserveScroll: true });
 };
 
-let intervalId = null;
+let channelChat = null;
 
 onMounted(() => {
     scrollToBottom();
-    // Refrescar cada 10 segundos
-    intervalId = setInterval(refrescarChat, 10000);
+    
+    // Suscribirse al canal privado del chat
+    channelChat = window.Echo.private(`chat.${props.chat.id}`)
+        .listen('.nuevo.mensaje', (e) => {
+            // Cuando se recibe un nuevo mensaje, actualizar el chat
+            refrescarChat();
+        });
 });
 
-// Limpiar el intervalo cuando el componente se desmonta
+// Limpiar la suscripción cuando el componente se desmonta
 onUnmounted(() => {
-    if (intervalId) {
-        clearInterval(intervalId);
+    if (channelChat) {
+        channelChat.unsubscribe();
     }
 });
 

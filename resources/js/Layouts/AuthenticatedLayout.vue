@@ -1,16 +1,38 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import NotificacionBadge from '@/Components/NotificacionBadge.vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, usePage, router } from '@inertiajs/vue3';
 import DarkModeToggle from "@/Components/DarkModeToggle.vue";
 const showingNavigationDropdown = ref(false);
 const user = usePage().props.auth.user;
-const mensajesNoLeidos = usePage().props.mensajesNoLeidos;
+const mensajesNoLeidos = ref(usePage().props.mensajesNoLeidos);
+
+// Configurar Pusher para notificaciones de mensajes
+onMounted(() => {
+    // Suscribirse al canal privado del usuario
+    window.Echo.private(`App.Models.User.${user.id}`)
+        .listen('.mensaje.recibido', (e) => {
+            // Incrementar el contador de mensajes no leídos
+            mensajesNoLeidos.value += 1;
+            
+            // Opcionalmente mostrar una notificación
+            if (Notification.permission === 'granted') {
+                new Notification('Nuevo mensaje', {
+                    body: 'Has recibido un nuevo mensaje'
+                });
+            }
+        });
+});
+
+// Limpiar suscripción cuando se desmonta el componente
+onUnmounted(() => {
+    window.Echo.leave(`App.Models.User.${user.id}`);
+});
 </script>
 
 <template>
