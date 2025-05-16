@@ -26,8 +26,8 @@ defineProps({
 <template>
     <div class="bg-neutral-blue dark:bg-dark-card text-white rounded-lg shadow-md p-4">
         <div class="flex justify-between items-center mb-2">
-            <span class="text-sm">{{ direccion }}</span>
-            <button class="text-white">
+            <span class="text-sm truncate max-w-[80%]">{{ direccion }}</span>
+            <button class="text-white flex-shrink-0 ml-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -35,7 +35,7 @@ defineProps({
         </div>
         
         <div class="text-center mb-3">
-            <h2 class="text-xl font-bold">{{ nombre }}</h2>
+            <h2 class="text-xl font-bold break-words">{{ nombre }}</h2>
             <div v-if="categoria" class="mt-1">
                 <span class="inline-block bg-primary bg-opacity-20 text-primary dark:bg-primary-dark dark:text-white px-2 py-1 rounded-full text-xs">
                     {{ categoria }}
@@ -53,7 +53,14 @@ defineProps({
         </div>
         
         <div class="text-sm text-center">
-            <p>{{ descripcion }}</p>
+            <p class="break-words">{{ descripcion }}</p>
+        </div>
+        
+        <!-- Botón Ver detalles -->
+        <div class="mt-4 flex justify-center">
+            <button class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded text-sm transition-colors duration-200">
+                Ver detalles
+            </button>
         </div>
     </div>
 </template>

@@ -15,14 +15,14 @@
                     <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-dark-secondary">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                             <div>
-                                <h3 class="text-lg font-medium text-primary dark:text-white">
+                                <h3 class="text-lg font-medium text-primary dark:text-white break-words">
                                     {{ solicitud.titulo }}
                                 </h3>
-                                <div class="mt-1 flex items-center">
+                                <div class="mt-1 flex flex-wrap gap-2 items-center">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark">
                                         {{ solicitud.categoria }}
                                     </span>
-                                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
                                           :class="{
                                             'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100': solicitud.estado === 'cerrada',
                                             'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100': solicitud.estado === 'aceptada',
@@ -30,13 +30,34 @@
                                           }">
                                         {{ estadoFormateado }}
                                     </span>
+                                    
+                                    <!-- Indicador de estado cerrada o reabierta -->
+                                    <div v-if="solicitud.estado === 'cerrada'" class="mt-1 text-sm text-green-600 dark:text-green-400 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        Solicitud marcada como resuelta
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="mt-2 md:mt-0">
-                                <Link :href="route('solicitud.busqueda.show', solicitud.id)" class="text-sm text-primary dark:text-primary-light hover:text-primary-dark">
-                                    Ver detalles de la solicitud
-                                </Link>
+                                <div class="flex flex-col sm:flex-row gap-2">
+                                    <Link :href="route('solicitud.busqueda.show', solicitud.id)" class="text-sm text-primary dark:text-primary-light hover:text-primary-dark">
+                                        Ver detalles de la solicitud
+                                    </Link>
+                                    
+                                    <Link 
+                                        v-if="$page.props.auth.user.id === cliente.id && solicitud.estado === 'aceptada'"
+                                        :href="route('solicitudes.show', solicitud.id)" 
+                                        class="text-sm text-primary dark:text-primary-light hover:text-primary-dark flex items-center"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                        Cambiar estado
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                         
@@ -100,27 +121,38 @@
                         
                         <!-- Formulario para enviar mensajes -->
                         <form @submit.prevent="enviarMensaje" class="mt-auto border-t pt-3 dark:border-gray-700">
-                            <div class="flex">
+                            <div class="flex flex-col sm:flex-row gap-2 sm:gap-0">
                                 <textarea
                                     v-model="nuevoMensaje"
                                     placeholder="Escribe un mensaje..."
-                                    class="flex-grow rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-input dark:text-white dark:border-gray-700 resize-none"
+                                    class="w-full sm:flex-grow rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-input dark:text-white dark:border-gray-700 resize-none"
                                     rows="2"
                                     @keydown.enter.prevent="enviarMensaje"
+                                    :disabled="solicitud.estado === 'cerrada'"
                                 ></textarea>
                                 <button
                                     type="submit"
-                                    class="ml-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg self-end disabled:opacity-50"
-                                    :disabled="!nuevoMensaje.trim() || enviando"
+                                    class="sm:ml-2 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg self-end disabled:opacity-50 w-full sm:w-auto"
+                                    :disabled="!nuevoMensaje.trim() || enviando || solicitud.estado === 'cerrada'"
                                 >
-                                    <svg v-if="!enviando" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                                    </svg>
-                                    <svg v-else class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
+                                    <template v-if="solicitud.estado === 'cerrada'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
+                                    <template v-else>
+                                        <svg v-if="!enviando" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                                        </svg>
+                                        <svg v-else class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    </template>
                                 </button>
+                            </div>
+                            <div v-if="solicitud.estado === 'cerrada'" class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">
+                                La solicitud ha sido marcada como resuelta. No se pueden enviar más mensajes.
                             </div>
                         </form>
                     </div>
@@ -165,7 +197,7 @@ const scrollToBottom = () => {
 };
 
 const enviarMensaje = () => {
-    if (!nuevoMensaje.value.trim() || enviando.value) return;
+    if (!nuevoMensaje.value.trim() || enviando.value || props.solicitud.estado === 'cerrada') return;
     
     enviando.value = true;
     

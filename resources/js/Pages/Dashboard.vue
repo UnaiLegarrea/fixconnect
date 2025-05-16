@@ -11,10 +11,20 @@ const props = defineProps({
 // Función para obtener clase de color según el estado
 const getStatusColor = (estado) => {
     switch (estado) {
-        case 'abierta': return 'text-warning bg-warning/10 dark:text-warning dark:bg-warning/20';
-        case 'aceptada': return 'text-secondary bg-secondary/10 dark:text-secondary-light dark:bg-secondary/20';
-        case 'cerrada': return 'text-success bg-success/10 dark:text-success dark:bg-success/20';
+        case 'abierta': return 'text-blue-800 bg-blue-100 dark:text-blue-200 dark:bg-blue-900';
+        case 'aceptada': return 'text-yellow-800 bg-yellow-100 dark:text-yellow-200 dark:bg-yellow-900';
+        case 'cerrada': return 'text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900';
         default: return 'text-gray-600 bg-gray-100 dark:text-gray-300 dark:bg-gray-700';
+    }
+};
+
+// Función para traducir el estado a un texto más descriptivo
+const getStatusText = (estado) => {
+    switch (estado) {
+        case 'abierta': return 'Abierta';
+        case 'aceptada': return 'En Proceso';
+        case 'cerrada': return 'Resuelta';
+        default: return estado.charAt(0).toUpperCase() + estado.slice(1);
     }
 };
 </script>
@@ -99,7 +109,7 @@ const getStatusColor = (estado) => {
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full" 
                                                 :class="getStatusColor(solicitud.estado)">
-                                                {{ solicitud.estado.charAt(0).toUpperCase() + solicitud.estado.slice(1) }}
+                                                {{ getStatusText(solicitud.estado) }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-primary-light dark:text-gray-400">
@@ -125,9 +135,9 @@ const getStatusColor = (estado) => {
                             <div class="space-y-4">
                                 <div v-for="chat in stats.chatsActivos" :key="chat.id" 
                                      class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 flex flex-col gap-2">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium text-primary-dark dark:text-white">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                                        <div class="mb-2 sm:mb-0">
+                                            <h4 class="font-medium text-primary-dark dark:text-white break-words">
                                                 <Link :href="route('chat.show', chat.id)" class="hover:underline">
                                                     {{ chat.titulo }}
                                                 </Link>
@@ -144,23 +154,23 @@ const getStatusColor = (estado) => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <span class="text-xs text-gray-500">{{ chat.fecha }}</span>
+                                        <span class="text-xs text-gray-500 sm:flex-shrink-0 mb-2 sm:mb-0 sm:ml-2">{{ chat.fecha }}</span>
                                     </div>
                                     
                                     <div v-if="chat.ultimoMensaje" class="mt-2 p-2 bg-gray-100 dark:bg-gray-700 rounded text-sm">
-                                        <div class="flex justify-between items-center">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                                             <span class="font-medium text-gray-700 dark:text-gray-300">
                                                 {{ chat.ultimoMensaje.esPropio ? 'Tú' : 'Contacto' }}:
                                             </span>
-                                            <span class="text-xs text-gray-500">{{ chat.ultimoMensaje.fecha }}</span>
+                                            <span class="text-xs text-gray-500 mt-1 sm:mt-0">{{ chat.ultimoMensaje.fecha }}</span>
                                         </div>
-                                        <p class="text-gray-600 dark:text-gray-400 mt-1">{{ chat.ultimoMensaje.contenido }}</p>
+                                        <p class="text-gray-600 dark:text-gray-400 mt-1 break-words">{{ chat.ultimoMensaje.contenido }}</p>
                                     </div>
                                     
-                                    <div class="mt-2 flex justify-end">
+                                    <div class="mt-2 flex justify-center sm:justify-end">
                                         <Link 
                                             :href="route('chat.show', chat.id)" 
-                                            class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md bg-primary-light hover:bg-primary-light/80 text-white dark:bg-primary-dark dark:hover:bg-primary-dark/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
+                                            class="w-full sm:w-auto inline-flex justify-center items-center px-3 py-2 border border-transparent text-sm leading-5 font-medium rounded-md bg-primary-light hover:bg-primary-light/80 text-white dark:bg-primary-dark dark:hover:bg-primary-dark/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
                                         >
                                             <svg class="-ml-0.5 mr-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />

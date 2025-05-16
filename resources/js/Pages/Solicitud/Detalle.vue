@@ -13,16 +13,16 @@
                 <div class="bg-white dark:bg-dark-surface shadow-sm rounded-lg overflow-hidden">
                     <!-- Datos de la solicitud -->
                     <div class="p-6">
-                        <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
                             <div>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 break-words">
                                     {{ solicitud.titulo }}
-                                </h3>                                <div class="mb-4 flex items-center">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark  mr-2">
+                                </h3>                                <div class="mb-4 flex flex-wrap gap-2 items-center">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark">
                                         {{ solicitud.categoria }}
                                     </span>
                                     <span 
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2"
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                                         :class="{
                                             'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': solicitud.estado === 'aceptada',
                                             'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': solicitud.estado === 'abierta',
@@ -70,10 +70,10 @@
                             </div>
                         </div>
                     </div>                    <!-- Botones de acción -->
-                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 flex flex-wrap gap-2 justify-between border-t border-gray-200 dark:border-gray-700">
+                    <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 flex flex-col sm:flex-row gap-3 justify-between border-t border-gray-200 dark:border-gray-700">
                         <Link
                             :href="solicitud.estado === 'aceptada' ? route('dashboard') : route('solicitud.busqueda')"
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-neutral dark:hover:bg-dark-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
+                            class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-neutral dark:hover:bg-dark-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800 w-full sm:w-auto"
                         >
                             <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
@@ -81,11 +81,11 @@
                             {{ solicitud.estado === 'aceptada' ? 'Volver al Dashboard' : 'Volver a la búsqueda' }}
                         </Link>
 
-                        <div class="flex gap-2">
+                        <div class="flex flex-col sm:flex-row gap-2">
                             <!-- Botón de Chat -->
                             <Link
                                 :href="route('chat.show', solicitud.id)"
-                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary w-full sm:w-auto"
                                 v-if="solicitud.estado === 'aceptada'"
                             >
                                 <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -95,10 +95,10 @@
                             </Link>
 
                             <!-- Botón de Aceptar Solicitud -->
-                            <form v-if="$page.props.auth.user.rol === 'empresa' || $page.props.auth.user.rol === 'admin'" @submit.prevent="aceptarSolicitud">
+                            <form v-if="$page.props.auth.user.rol === 'empresa' || $page.props.auth.user.rol === 'admin'" @submit.prevent="aceptarSolicitud" class="w-full sm:w-auto">
                                 <button
                                     type="submit"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                    class="inline-flex w-full justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                                     :disabled="processing || solicitud.estado !== 'abierta'"
                                 >
                                     <svg v-if="!processing" class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

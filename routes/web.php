@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     // Rutas para detalles de solicitudes específicas (debe ir después de las rutas con prefijos más específicos)
     Route::get('/solicitudes/{solicitud}', [App\Http\Controllers\SolicitudController::class, 'show'])->name('solicitudes.show');
     Route::delete('/solicitudes/{solicitud}/cancelar', [App\Http\Controllers\SolicitudController::class, 'cancelar'])->name('solicitudes.cancelar');
+    Route::patch('/solicitudes/{solicitud}/cambiar-estado', [App\Http\Controllers\SolicitudController::class, 'cambiarEstado'])->name('solicitudes.cambiar-estado');
     
     // Rutas para chat
     Route::get('/chats', [App\Http\Controllers\ChatListController::class, 'index'])->name('chat.list');

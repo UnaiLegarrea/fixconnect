@@ -5,6 +5,7 @@ import { Head, Link } from '@inertiajs/vue3';
 const props = defineProps({
     solicitud: Object,
     empresa: Object,
+    clienteId: Number,
 });
 
 const estadoClases = (estado) => {
@@ -34,13 +35,12 @@ const estadoClases = (estado) => {
                         &larr; Volver al Dashboard
                     </Link>
                 </div>
-                
-                <div class="bg-white dark:bg-dark-card shadow-sm rounded-lg p-6">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ solicitud.titulo }}</h1>
-                            <div class="mt-2 flex items-center">
-                                <span :class="['px-2 py-1 text-xs rounded-full mr-2', estadoClases(solicitud.estado)]">
+                  <div class="bg-white dark:bg-dark-card shadow-sm rounded-lg p-6">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-6">
+                        <div class="flex-1">
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white break-words">{{ solicitud.titulo }}</h1>
+                            <div class="mt-2 flex flex-wrap gap-2 items-center">
+                                <span :class="['px-2 py-1 text-xs rounded-full', estadoClases(solicitud.estado)]">
                                     {{ solicitud.estado }}
                                 </span>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">
@@ -48,7 +48,7 @@ const estadoClases = (estado) => {
                                 </span>
                             </div>
                         </div>
-                        <div>
+                        <div class="mt-2 sm:mt-0">
                             <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-800 dark:text-gray-200">
                                 {{ solicitud.categoria }}
                             </span>
@@ -79,22 +79,47 @@ const estadoClases = (estado) => {
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg>
                                 <span class="text-sm">Verificada</span>
-                            </div>
-                        </div>
-                    </div>                      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-end">
+                            </div>                        </div>                    </div>                      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 flex flex-wrap gap-2 justify-end">
+                        <!-- Botón para cancelar solicitudes en estado 'abierta' -->
                         <Link 
                             v-if="solicitud.estado === 'abierta'" 
                             :href="route('solicitudes.cancelar', solicitud.id)" 
                             method="delete"
                             as="button"
-                            class="px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-white hover:bg-red-700 transition"
+                            class="w-full sm:w-auto px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-white hover:bg-red-700 transition text-center"
                         >
                             Cancelar Solicitud
-                        </Link>                        
+                        </Link>
+                        
+                        <!-- Botón para reabrir solicitudes en estado 'aceptada' -->
+                        <Link 
+                            v-if="solicitud.estado === 'aceptada' && $page.props.auth.user.id === clienteId" 
+                            :href="route('solicitudes.cambiar-estado', solicitud.id)" 
+                            method="patch"
+                            :data="{ estado: 'abierta' }"
+                            as="button"
+                            class="w-full sm:w-auto px-4 py-2 bg-amber-600 border border-transparent rounded-md font-semibold text-white hover:bg-amber-700 transition text-center"
+                        >
+                            Reabrir Solicitud
+                        </Link>
+                        
+                        <!-- Botón para marcar como 'cerrada' (resuelta) -->
+                        <Link 
+                            v-if="solicitud.estado === 'aceptada' && $page.props.auth.user.id === clienteId" 
+                            :href="route('solicitudes.cambiar-estado', solicitud.id)" 
+                            method="patch"
+                            :data="{ estado: 'cerrada' }"
+                            as="button"
+                            class="w-full sm:w-auto px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 transition text-center"
+                        >
+                            Marcar como Resuelta
+                        </Link>
+                        
+                        <!-- Botón para chatear con la empresa asignada -->
                         <Link 
                             v-if="solicitud.estado === 'aceptada' && empresa" 
                             :href="route('chat.show', solicitud.id)" 
-                            class="px-4 py-2 bg-primary border border-transparent rounded-md font-semibold text-white hover:bg-primary-dark transition ml-2"
+                            class="w-full sm:w-auto px-4 py-2 bg-primary border border-transparent rounded-md font-semibold text-white hover:bg-primary-dark transition text-center"
                         >
                             Contactar Empresa
                         </Link>

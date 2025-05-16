@@ -108,11 +108,17 @@ class ChatController extends Controller
         ]);
         
         $user = Auth::user();
-          // Verificar que el usuario tenga permiso para enviar mensajes en este chat
+        
+        // Verificar que el usuario tenga permiso para enviar mensajes en este chat
         if ($user->id !== $solicitud->cliente_id && 
             ($user->rol !== 'empresa' && $user->rol !== 'admin') && 
             ($user->rol === 'empresa' && $user->empresa->id !== $solicitud->empresa_id)) {
             abort(403, 'No autorizado para enviar mensajes en este chat.');
+        }
+        
+        // Verificar que la solicitud no esté cerrada
+        if ($solicitud->estado === 'cerrada') {
+            return back()->with('error', 'No se pueden enviar mensajes en solicitudes resueltas.');
         }
         
         // Buscar o crear el chat para esta solicitud

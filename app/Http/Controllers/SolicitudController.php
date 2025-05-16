@@ -99,7 +99,8 @@ class SolicitudController extends Controller
                 'fecha' => $solicitud->created_at->format('d/m/Y'),
                 'imagen_url' => $solicitud->imagen_path ? asset('storage/' . $solicitud->imagen_path) : null,
             ],
-            'empresa' => $empresa
+            'empresa' => $empresa,
+            'clienteId' => $solicitud->cliente_id
         ]);
     }
     
@@ -128,5 +129,47 @@ class SolicitudController extends Controller
         $solicitud->delete();
         
         return redirect()->route('dashboard')->with('success', 'Solicitud cancelada correctamente.');
+    }
+
+    /**
+     * Cambia el estado de una solicitud existente.
+     */
+    public function cambiarEstado(Request $request, Solicitud $solicitud)
+    {
+        // Verificar que el usuario sea el cliente de la solicitud o admin
+        $user = Auth::user();
+        if ($user->id !== $solicitud->cliente_id && $user->rol !== 'admin') {
+            abort(403, 'No autorizado para cambiar el estado de esta solicitud.');
+        }
+        
+        $request->validate([
+            'estado' => 'required|in:abierta,aceptada,cerrada',
+        ]);
+        
+        $estadoAnterior = $solicitud->estado;
+        $nuevoEstado = $request->estado;
+        
+        // Validar cambios de estado permitidos
+        $cambiosPermitidos = [
+            'aceptada' => ['abierta', 'cerrada'], // De 'aceptada' se puede pasar a 'abierta' o 'cerrada'
+        ];
+        
+        if (!isset($cambiosPermitidos[$estadoAnterior]) || !in_array($nuevoEstado, $cambiosPermitidos[$estadoAnterior])) {
+            return redirect()->back()->with('error', 'El cambio de estado solicitado no está permitido.');
+        }
+        
+        // Si se cambia de 'aceptada' a 'abierta', se debe eliminar la asignación a la empresa
+        if ($estadoAnterior === 'aceptada' && $nuevoEstado === 'abierta') {
+            $solicitud->empresa_id = null;
+        }
+        
+        $solicitud->estado = $nuevoEstado;
+        $solicitud->save();
+        
+        $mensajeExito = $nuevoEstado === 'cerrada' 
+            ? 'Solicitud marcada como resuelta.'
+            : 'Solicitud reabierta correctamente.';
+        
+        return redirect()->back()->with('success', $mensajeExito);
     }
 }

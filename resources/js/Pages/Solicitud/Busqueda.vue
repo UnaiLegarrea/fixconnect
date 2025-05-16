@@ -64,10 +64,10 @@
                     <!-- Lista de solicitudes -->
                     <div v-else class="divide-y divide-gray-200 dark:divide-gray-700">
                         <div v-for="solicitud in solicitudes.data" :key="solicitud.id" class="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
-                            <div class="flex justify-between items-start">
-                                <div class="flex">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                                <div class="flex flex-col sm:flex-row">
                                     <!-- Miniatura de la imagen si existe -->
-                                    <div v-if="solicitud.imagen_url" class="mr-4 flex-shrink-0">
+                                    <div v-if="solicitud.imagen_url" class="mr-0 mb-3 sm:mb-0 sm:mr-4 flex-shrink-0">
                                         <img 
                                             :src="solicitud.imagen_url" 
                                             alt="Miniatura" 
@@ -75,25 +75,26 @@
                                         >
                                     </div>
                                     
-                                    <div>
-                                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="text-lg font-medium text-gray-900 dark:text-white break-words">
                                             {{ solicitud.titulo }}
                                         </h3>
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 break-words">
                                             {{ solicitud.descripcion }}
                                         </p>
-                                        <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark ">
+                                        <div class="mt-2 flex flex-wrap gap-2 items-center text-sm text-gray-500 dark:text-gray-400">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark">
                                                 {{ solicitud.categoria }}
                                             </span>
-                                            <span class="ml-4">Cliente: {{ solicitud.cliente.nombre }}</span>
-                                            <span class="ml-4">Fecha: {{ solicitud.fecha }}</span>
+                                            <span>Cliente: {{ solicitud.cliente.nombre }}</span>
+                                            <span>Fecha: {{ solicitud.fecha }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex space-x-2">
+                                <div class="flex sm:flex-shrink-0 mt-3 sm:mt-0">
                                     <Link
                                         :href="route('solicitud.busqueda.show', solicitud.id)"
-                                        class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-5 font-medium rounded-md bg-primary-light hover:bg-primary-light/80 text-white dark:bg-primary-dark dark:hover:bg-primary-dark/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
+                                        class="w-full sm:w-auto inline-flex justify-center items-center px-3 py-2 border border-transparent text-sm leading-5 font-medium rounded-md bg-primary-light hover:bg-primary-light/80 text-white dark:bg-primary-dark dark:hover:bg-primary-dark/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
                                     >
                                         Ver detalles
                                     </Link>
