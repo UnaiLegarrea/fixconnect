@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 // Acceder a las props recibidas desde el controlador
 const props = defineProps({
@@ -41,6 +42,9 @@ const getStatusText = (estado) => {
 
         <div class="py-12 bg-neutral dark:bg-dark-secondary">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <!-- Flash Messages -->
+                <FlashMessage />
+                
                 <!-- Tarjetas de estadísticas -->
                 <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2">
                     <div class="overflow-hidden bg-white dark:bg-dark-surface shadow-md hover:shadow-lg transition-shadow duration-300 sm:rounded-lg border-l-4 border-warning dark:border-warning">
@@ -92,11 +96,14 @@ const getStatusText = (estado) => {
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-primary-dark dark:text-neutral">
                                                 <Link 
-                                                    :href="solicitud.estado === 'aceptada' ? 
-                                                        (solicitud.empresa_id && $page.props.auth.user.rol === 'empresa' ? 
+                                                    :href="
+                                                        $page.props.auth.user.rol === 'empresa' && solicitud.estado === 'aceptada' ? 
                                                             route('solicitud.busqueda.show', solicitud.id) : 
-                                                            route('solicitudes.show', solicitud.id)) : 
-                                                        route('solicitudes.show', solicitud.id)" 
+                                                        $page.props.auth.user.rol === 'cliente' ? 
+                                                            route('solicitudes.show', solicitud.id) : 
+                                                        solicitud.estado === 'abierta' ?
+                                                            route('solicitud.busqueda.show', solicitud.id) :
+                                                            route('solicitudes.show', solicitud.id)"
                                                     class="hover:underline"
                                                 >
                                                     {{ solicitud.titulo }}

@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 const props = defineProps({
     solicitud: Object,
@@ -29,20 +30,28 @@ const estadoClases = (estado) => {
         </template>
 
         <div class="py-6 bg-neutral dark:bg-dark-primary">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="mb-6">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">                <div class="mb-6">
                     <Link :href="route('dashboard')" class="text-primary dark:text-blue-400 hover:underline">
                         &larr; Volver al Dashboard
                     </Link>
                 </div>
-                  <div class="bg-white dark:bg-dark-card shadow-sm rounded-lg p-6">
+                
+                <FlashMessage />
+                
+                <div class="bg-white dark:bg-dark-card shadow-sm rounded-lg p-6">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-6">
                         <div class="flex-1">
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white break-words">{{ solicitud.titulo }}</h1>
-                            <div class="mt-2 flex flex-wrap gap-2 items-center">
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white break-words">{{ solicitud.titulo }}</h1>                            <div class="mt-2 flex flex-wrap gap-2 items-center">
                                 <span :class="['px-2 py-1 text-xs rounded-full', estadoClases(solicitud.estado)]">
-                                    {{ solicitud.estado }}
+                                    {{ solicitud.estado.charAt(0).toUpperCase() + solicitud.estado.slice(1) }}
                                 </span>
+                                <!-- Indicador de estado cerrada -->
+                                <div v-if="solicitud.estado === 'cerrada'" class="text-sm text-green-600 dark:text-green-400 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    Solicitud resuelta
+                                </div>
                                 <span class="text-sm text-gray-500 dark:text-gray-400">
                                     Creada el {{ solicitud.fecha }}
                                 </span>

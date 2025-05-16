@@ -28,8 +28,7 @@ class DashboardController extends Controller
             $solicitudesCompletadas = Solicitud::where('empresa_id', $empresa->id)
                                         ->where('estado', 'cerrada')
                                         ->count();
-            
-            // Solicitudes recientes (todas las de esta empresa)
+              // Solicitudes recientes (todas las de esta empresa)
             $solicitudesRecientes = Solicitud::with('cliente')
                                     ->where('empresa_id', $empresa->id)
                                     ->orderBy('updated_at', 'desc')
@@ -41,7 +40,8 @@ class DashboardController extends Controller
                                             'titulo' => $solicitud->titulo,
                                             'categoria' => $solicitud->categoria,
                                             'estado' => $solicitud->estado,
-                                            'fecha' => $solicitud->updated_at->format('Y-m-d')
+                                            'fecha' => $solicitud->updated_at->format('Y-m-d'),
+                                            'empresa_id' => $solicitud->empresa_id
                                         ];
                                     });
                                     
@@ -84,8 +84,7 @@ class DashboardController extends Controller
             // Solicitudes completadas (cerradas)
             $solicitudesCompletadas = Solicitud::where('estado', 'cerrada')
                                         ->count();
-            
-            // Solicitudes recientes (todas, globales)
+              // Solicitudes recientes (todas, globales)
             $solicitudesRecientes = Solicitud::with(['empresa.user', 'cliente'])
                                     ->orderBy('updated_at', 'desc')
                                     ->take(10)
@@ -96,7 +95,8 @@ class DashboardController extends Controller
                                             'titulo' => $solicitud->titulo,
                                             'categoria' => $solicitud->categoria,
                                             'estado' => $solicitud->estado,
-                                            'fecha' => $solicitud->updated_at->format('Y-m-d')
+                                            'fecha' => $solicitud->updated_at->format('Y-m-d'),
+                                            'empresa_id' => $solicitud->empresa_id
                                         ];
                                     });
                                     
@@ -140,8 +140,7 @@ class DashboardController extends Controller
             $solicitudesCompletadas = Solicitud::where('cliente_id', $user->id)
                                         ->where('estado', 'cerrada')
                                         ->count();
-            
-            // Solicitudes recientes (todas las del usuario)
+              // Solicitudes recientes (todas las del usuario)
             $solicitudesRecientes = Solicitud::with('empresa.user')
                                     ->where('cliente_id', $user->id)
                                     ->orderBy('updated_at', 'desc')
@@ -153,7 +152,8 @@ class DashboardController extends Controller
                                             'titulo' => $solicitud->titulo,
                                             'categoria' => $solicitud->categoria,
                                             'estado' => $solicitud->estado,
-                                            'fecha' => $solicitud->updated_at->format('Y-m-d')
+                                            'fecha' => $solicitud->updated_at->format('Y-m-d'),
+                                            'empresa_id' => $solicitud->empresa_id
                                         ];
                                     });
                                     

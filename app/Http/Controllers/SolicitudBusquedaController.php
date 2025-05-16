@@ -153,12 +153,18 @@ class SolicitudBusquedaController extends Controller
         
         // Verificar permisos según estado de la solicitud
         if ($solicitud->estado === 'aceptada' && $solicitud->empresa_id !== null) {
-            // Si la solicitud está aceptada, verificar que la empresa es la asignada
+            // Si la solicitud está aceptada, verificar que la empresa es la asignada o es admin
             if ($user->rol === 'empresa' && $user->empresa->id !== $solicitud->empresa_id) {
                 return redirect()->route('solicitud.busqueda')->with('error', 'Esta solicitud ha sido aceptada por otra empresa.');
             }
+            // Nota: Si es la empresa asignada o un admin, se permite continuar
+        } else if ($solicitud->estado === 'cerrada') {
+            // Si la solicitud está cerrada, solo puede verla la empresa asignada o un admin
+            if ($user->rol === 'empresa' && $user->empresa->id !== $solicitud->empresa_id) {
+                return redirect()->route('solicitud.busqueda')->with('error', 'Esta solicitud ya ha sido resuelta y cerrada.');
+            }
         } else if ($solicitud->estado !== 'abierta') {
-            // Para otros estados (cerradas), redirigir
+            // Para otros estados, redirigir
             return redirect()->route('solicitud.busqueda')->with('error', 'Esta solicitud ya no está disponible para visualización.');
         }
         

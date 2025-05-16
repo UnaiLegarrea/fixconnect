@@ -10,6 +10,8 @@
 
         <div class="py-12 bg-neutral dark:bg-dark-secondary">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <FlashMessage />
+                
                 <div class="overflow-hidden bg-white dark:bg-dark-surface shadow-md sm:rounded-lg">
                     <!-- Información de solicitud y participantes -->
                     <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-dark-secondary">
@@ -166,6 +168,7 @@
 import { ref, computed, onMounted, nextTick, watch, onUnmounted } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 
 const props = defineProps({
     chat: Object,
