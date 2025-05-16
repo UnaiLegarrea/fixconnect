@@ -57,6 +57,7 @@ class SolicitudBusquedaController extends Controller
                 'descripcion' => substr($solicitud->descripcion, 0, 150) . (strlen($solicitud->descripcion) > 150 ? '...' : ''),
                 'categoria' => $solicitud->categoria,
                 'fecha' => $solicitud->created_at->format('d/m/Y'),
+                'imagen_url' => $solicitud->imagen_path ? asset('storage/' . $solicitud->imagen_path) : null,
                 'cliente' => [
                     'id' => $solicitud->cliente->id,
                     'nombre' => $solicitud->cliente->nombre,
@@ -160,6 +161,7 @@ class SolicitudBusquedaController extends Controller
                 'descripcion' => $solicitud->descripcion,
                 'categoria' => $solicitud->categoria,
                 'fecha' => $solicitud->created_at->format('d/m/Y'),
+                'imagen_url' => $solicitud->imagen_path ? asset('storage/' . $solicitud->imagen_path) : null,
                 'cliente' => [
                     'id' => $solicitud->cliente->id,
                     'nombre' => $solicitud->cliente->nombre,

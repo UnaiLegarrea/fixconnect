@@ -54,10 +54,17 @@ const estadoClases = (estado) => {
                             </span>
                         </div>
                     </div>
-                    
-                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mb-6">
+                      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mb-6">
                         <h3 class="font-medium text-gray-900 dark:text-white mb-2">Descripción</h3>
                         <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line">{{ solicitud.descripcion }}</p>
+                    </div>
+                    
+                    <!-- Mostrar imagen si existe -->
+                    <div v-if="solicitud.imagen_url" class="border-t border-gray-200 dark:border-gray-700 pt-4 mb-6">
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Imagen</h3>
+                        <div class="mt-2">
+                            <img :src="solicitud.imagen_url" alt="Imagen de la solicitud" class="max-h-96 rounded-lg">
+                        </div>
                     </div>
                     
                     <div v-if="empresa" class="border-t border-gray-200 dark:border-gray-700 pt-4 mb-6">

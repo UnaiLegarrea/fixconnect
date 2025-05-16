@@ -34,6 +34,20 @@
                                         <p class="whitespace-pre-wrap">{{ solicitud.descripcion }}</p>
                                     </div>
                                 </div>
+                                
+                                <!-- Mostrar imagen si existe -->
+                                <div v-if="solicitud.imagen_url" class="mb-6">
+                                    <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                        Imagen
+                                    </h4>
+                                    <div class="mt-2">
+                                        <img 
+                                            :src="solicitud.imagen_url" 
+                                            alt="Imagen de la solicitud" 
+                                            class="max-h-96 rounded-lg object-cover shadow-md"
+                                        >
+                                    </div>
+                                </div>
 
                                 <div class="mb-6">
                                     <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">

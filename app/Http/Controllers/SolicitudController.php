@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Solicitud;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SolicitudController extends Controller
 {
@@ -36,7 +37,15 @@ class SolicitudController extends Controller
             'titulo' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'categoria' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $imagenPath = null;
+
+        // Procesar la imagen si se ha subido
+        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
+            $imagenPath = $request->file('imagen')->store('solicitudes', 'public');
+        }
 
         Solicitud::create([
             'cliente_id' => Auth::id(),
@@ -44,6 +53,7 @@ class SolicitudController extends Controller
             'descripcion' => $request->descripcion,
             'categoria' => $request->categoria,
             'estado' => 'abierta',
+            'imagen_path' => $imagenPath,
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Solicitud creada correctamente');
@@ -79,6 +89,7 @@ class SolicitudController extends Controller
                 'categoria' => $solicitud->categoria,
                 'estado' => $solicitud->estado,
                 'fecha' => $solicitud->created_at->format('d/m/Y'),
+                'imagen_url' => $solicitud->imagen_path ? asset('storage/' . $solicitud->imagen_path) : null,
             ],
             'empresa' => $empresa
         ]);
@@ -98,6 +109,11 @@ class SolicitudController extends Controller
         // Verificar que el estado sea 'abierta'
         if ($solicitud->estado !== 'abierta') {
             return redirect()->back()->with('error', 'Solo se pueden cancelar solicitudes en estado abierto.');
+        }
+        
+        // Eliminar la imagen si existe
+        if ($solicitud->imagen_path) {
+            Storage::disk('public')->delete($solicitud->imagen_path);
         }
         
         // Eliminar la solicitud

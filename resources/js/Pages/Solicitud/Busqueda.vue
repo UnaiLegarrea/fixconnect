@@ -64,18 +64,29 @@
                     <div v-else class="divide-y divide-gray-200 dark:divide-gray-700">
                         <div v-for="solicitud in solicitudes.data" :key="solicitud.id" class="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150">
                             <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                                        {{ solicitud.titulo }}
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                        {{ solicitud.descripcion }}
-                                    </p>
-                                    <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark ">
-                                            {{ solicitud.categoria }}
-                                        </span>
-                                        <span class="ml-4">Cliente: {{ solicitud.cliente.nombre }}</span>
-                                        <span class="ml-4">Fecha: {{ solicitud.fecha }}</span>
+                                <div class="flex">
+                                    <!-- Miniatura de la imagen si existe -->
+                                    <div v-if="solicitud.imagen_url" class="mr-4 flex-shrink-0">
+                                        <img 
+                                            :src="solicitud.imagen_url" 
+                                            alt="Miniatura" 
+                                            class="h-24 w-24 object-cover rounded-md shadow-sm"
+                                        >
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                                            {{ solicitud.titulo }}
+                                        </h3>
+                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ solicitud.descripcion }}
+                                        </p>
+                                        <div class="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400">                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark ">
+                                                {{ solicitud.categoria }}
+                                            </span>
+                                            <span class="ml-4">Cliente: {{ solicitud.cliente.nombre }}</span>
+                                            <span class="ml-4">Fecha: {{ solicitud.fecha }}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="flex space-x-2">

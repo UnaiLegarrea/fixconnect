@@ -12,8 +12,20 @@ class Solicitud extends Model
     protected $table = 'solicitudes';
     
     protected $fillable = [
-        'cliente_id', 'empresa_id', 'titulo', 'descripcion', 'estado', 'categoria',
+        'cliente_id', 'empresa_id', 'titulo', 'descripcion', 'estado', 'categoria', 'imagen_path',
     ];
+    
+    /**
+     * Obtener la URL completa de la imagen
+     */
+    public function getImagenUrlAttribute()
+    {
+        if (!$this->imagen_path) {
+            return null;
+        }
+        
+        return asset('storage/' . $this->imagen_path);
+    }
 
     public function cliente()
     {
