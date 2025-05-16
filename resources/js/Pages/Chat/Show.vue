@@ -127,7 +127,7 @@
                                 <textarea
                                     v-model="nuevoMensaje"
                                     placeholder="Escribe un mensaje..."
-                                    class="w-full sm:flex-grow rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-input dark:text-white dark:border-gray-700 resize-none"
+                                    class="w-full sm:flex-grow rounded-lg border-gray-300 focus:border-primary focus:ring-primary dark:bg-dark-input dark:border-gray-700 resize-none"
                                     rows="2"
                                     @keydown.enter.prevent="enviarMensaje"
                                     :disabled="solicitud.estado === 'cerrada'"
