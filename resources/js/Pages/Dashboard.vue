@@ -81,7 +81,14 @@ const getStatusColor = (estado) => {
                                         class="hover:bg-neutral dark:hover:bg-dark-primary transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-primary-dark dark:text-neutral">
-                                                <Link :href="route('solicitudes.show', solicitud.id)" class="hover:underline">
+                                                <Link 
+                                                    :href="solicitud.estado === 'aceptada' ? 
+                                                        (solicitud.empresa_id && $page.props.auth.user.rol === 'empresa' ? 
+                                                            route('solicitud.busqueda.show', solicitud.id) : 
+                                                            route('solicitudes.show', solicitud.id)) : 
+                                                        route('solicitudes.show', solicitud.id)" 
+                                                    class="hover:underline"
+                                                >
                                                     {{ solicitud.titulo }}
                                                 </Link>
                                             </div>

@@ -21,6 +21,16 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-white dark:bg-primary-dark  mr-2">
                                         {{ solicitud.categoria }}
                                     </span>
+                                    <span 
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2"
+                                        :class="{
+                                            'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': solicitud.estado === 'aceptada',
+                                            'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': solicitud.estado === 'abierta',
+                                            'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': solicitud.estado === 'cerrada'
+                                        }"
+                                    >
+                                        {{ solicitud.estado.charAt(0).toUpperCase() + solicitud.estado.slice(1) }}
+                                    </span>
                                     <span class="text-sm text-gray-500 dark:text-gray-400">
                                         Publicada el {{ solicitud.fecha }}
                                     </span>
@@ -62,25 +72,26 @@
                     </div>                    <!-- Botones de acción -->
                     <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800 flex flex-wrap gap-2 justify-between border-t border-gray-200 dark:border-gray-700">
                         <Link
-                            :href="route('solicitud.busqueda')"
+                            :href="solicitud.estado === 'aceptada' ? route('dashboard') : route('solicitud.busqueda')"
                             class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-neutral dark:hover:bg-dark-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
                         >
                             <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                             </svg>
-                            Volver a la búsqueda
+                            {{ solicitud.estado === 'aceptada' ? 'Volver al Dashboard' : 'Volver a la búsqueda' }}
                         </Link>
 
                         <div class="flex gap-2">
                             <!-- Botón de Chat -->
                             <Link
                                 :href="route('chat.show', solicitud.id)"
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-neutral dark:hover:bg-dark-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-gray-800"
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                v-if="solicitud.estado === 'aceptada'"
                             >
-                                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
                                 </svg>
-                                {{ solicitud.estado !== 'abierta' ? 'Continuar Chat' : 'Iniciar Chat' }}
+                                {{ 'Continuar Chat' }}
                             </Link>
 
                             <!-- Botón de Aceptar Solicitud -->
@@ -115,7 +126,8 @@ import { router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 const props = defineProps({
-    solicitud: Object
+    solicitud: Object,
+    empresa: Object
 });
 
 const processing = ref(false);

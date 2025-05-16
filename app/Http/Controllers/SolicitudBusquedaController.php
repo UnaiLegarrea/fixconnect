@@ -134,7 +134,7 @@ class SolicitudBusquedaController extends Controller
             'empresa_id' => $empresa_id,
         ]);
         
-        return redirect()->route('solicitudes.chat', $solicitud->id)
+        return redirect()->route('chat.show', $solicitud->id)
                         ->with('success', 'Solicitud aceptada correctamente. Ya puedes comunicarte con el cliente.');
     }
     
@@ -149,9 +149,27 @@ class SolicitudBusquedaController extends Controller
             return redirect()->route('dashboard')->with('error', 'Solo las empresas y administradores pueden acceder a esta sección.');
         }
         
-        // Verificar que la solicitud esté abierta
-        if ($solicitud->estado !== 'abierta') {
-            return redirect()->route('solicitud.busqueda')->with('error', 'Esta solicitud ya no está disponible.');
+        // Verificar permisos según estado de la solicitud
+        if ($solicitud->estado === 'aceptada' && $solicitud->empresa_id !== null) {
+            // Si la solicitud está aceptada, verificar que la empresa es la asignada
+            if ($user->rol === 'empresa' && $user->empresa->id !== $solicitud->empresa_id) {
+                return redirect()->route('solicitud.busqueda')->with('error', 'Esta solicitud ha sido aceptada por otra empresa.');
+            }
+        } else if ($solicitud->estado !== 'abierta') {
+            // Para otros estados (cerradas), redirigir
+            return redirect()->route('solicitud.busqueda')->with('error', 'Esta solicitud ya no está disponible para visualización.');
+        }
+        
+        // Obtener datos de la empresa asignada si existe
+        $empresa = null;
+        if ($solicitud->empresa_id) {
+            $empresa = $solicitud->empresa->user;
+            $empresa = [
+                'id' => $solicitud->empresa->id,
+                'nombre' => $empresa->nombre,
+                'ubicacion' => $solicitud->empresa->ubicacion,
+                'verificada' => $solicitud->empresa->verificada,
+            ];
         }
         
         return Inertia::render('Solicitud/Detalle', [
@@ -160,13 +178,15 @@ class SolicitudBusquedaController extends Controller
                 'titulo' => $solicitud->titulo,
                 'descripcion' => $solicitud->descripcion,
                 'categoria' => $solicitud->categoria,
+                'estado' => $solicitud->estado,
                 'fecha' => $solicitud->created_at->format('d/m/Y'),
                 'imagen_url' => $solicitud->imagen_path ? asset('storage/' . $solicitud->imagen_path) : null,
                 'cliente' => [
                     'id' => $solicitud->cliente->id,
                     'nombre' => $solicitud->cliente->nombre,
                 ]
-            ]
+            ],
+            'empresa' => $empresa
         ]);
     }
 }

@@ -80,6 +80,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/chats', [App\Http\Controllers\ChatListController::class, 'index'])->name('chat.list');
     Route::get('/solicitudes/{solicitud}/chat', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
     Route::post('/solicitudes/{solicitud}/chat/enviar', [App\Http\Controllers\ChatController::class, 'enviarMensaje'])->name('chat.enviar-mensaje');
+    
+    // Ruta de compatibilidad para redirigir solicitudes.chat a chat.show
+    Route::get('/solicitudes/chat/{solicitud}', function(App\Models\Solicitud $solicitud) {
+        return redirect()->route('chat.show', $solicitud);
+    })->name('solicitudes.chat');
 });
 
 require __DIR__.'/auth.php';

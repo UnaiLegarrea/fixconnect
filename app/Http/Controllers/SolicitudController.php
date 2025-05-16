@@ -70,6 +70,14 @@ class SolicitudController extends Controller
             abort(403, 'No autorizado para ver esta solicitud.');
         }
         
+        // Si es una empresa, verificar sus permisos
+        if ($user->rol === 'empresa') {
+            // Sólo puede ver la solicitud si está asignada a esta empresa
+            if ($solicitud->empresa_id !== $user->empresa->id) {
+                abort(403, 'No autorizado para ver esta solicitud.');
+            }
+        }
+        
         $empresa = null;
         if ($solicitud->empresa_id) {
             $empresa = $solicitud->empresa->user;

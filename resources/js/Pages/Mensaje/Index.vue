@@ -34,11 +34,10 @@ const props = defineProps({
                         <p class="text-gray-500 dark:text-gray-400">No tienes conversaciones activas</p>
                     </div>
                     
-                    <div v-else>
-                        <div v-for="chat in chats" :key="chat.id" 
+                    <div v-else>                        <div v-for="chat in chats" :key="chat.id" 
                             class="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
                             <Link 
-                                :href="route('solicitudes.chat', chat.solicitud.id)" 
+                                :href="route('chat.show', chat.solicitud.id)" 
                                 class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
                             >
                                 <div class="flex justify-between items-start">

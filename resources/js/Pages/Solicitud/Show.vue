@@ -81,8 +81,7 @@ const estadoClases = (estado) => {
                                 <span class="text-sm">Verificada</span>
                             </div>
                         </div>
-                    </div>
-                      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-end">
+                    </div>                      <div class="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-end">
                         <Link 
                             v-if="solicitud.estado === 'abierta'" 
                             :href="route('solicitudes.cancelar', solicitud.id)" 
@@ -91,9 +90,10 @@ const estadoClases = (estado) => {
                             class="px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-white hover:bg-red-700 transition"
                         >
                             Cancelar Solicitud
-                        </Link>                        <Link 
+                        </Link>                        
+                        <Link 
                             v-if="solicitud.estado === 'aceptada' && empresa" 
-                            :href="route('solicitudes.chat', solicitud.id)" 
+                            :href="route('chat.show', solicitud.id)" 
                             class="px-4 py-2 bg-primary border border-transparent rounded-md font-semibold text-white hover:bg-primary-dark transition ml-2"
                         >
                             Contactar Empresa
