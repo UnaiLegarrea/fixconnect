@@ -32,7 +32,9 @@ class SolicitudBusquedaController extends Controller
         $query->where('estado', 'abierta');
         
         // Filtro por categoría (si se proporciona una categoría específica)
-        $categoria = $request->input('categoria', $empresaCategoria);
+        $categoria = $request->has('categoria') ? $request->input('categoria') : $empresaCategoria;
+        
+        // Solo aplicar filtro de categoría si no es "Todas" y existe un valor
         if ($categoria && $categoria !== 'Todas') {
             $query->where('categoria', $categoria);
         }

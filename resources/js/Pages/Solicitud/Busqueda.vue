@@ -20,6 +20,7 @@
                                 <select
                                     id="categoria"
                                     v-model="filtros.categoria"
+                                    @change="handleCategoriaChange"
                                     class="mt-1 block w-full py-2 px-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-dark-input rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-white dark:bg-dark-secondary"
                                 >                                    <option v-for="categoria in categorias" :key="categoria">{{ categoria }}</option>
                                 </select>
@@ -190,5 +191,10 @@ const buscar = () => {
         preserveState: true,
         replace: true
     });
+};
+
+// Escuchar cambios en el filtro de categoría y actualizar automáticamente
+const handleCategoriaChange = () => {
+    buscar();
 };
 </script>
